@@ -1,0 +1,40 @@
+= Cucumber Factory - create ActiveRecord objects without step definitions
+
+Cucumber Factory allows you to create ActiveRecord objects directly from your {Cucumber}[http://cukes.info/] features. No step definitions required.
+
+== Installation
+
+Install the gem:
+    sudo gem sources -a http://gems.github.com
+    sudo gem install makandra-cucumber_factory
+
+Add the following to your <tt>Initializer.run</tt> block in your <tt>environment.rb</tt>:
+    config.gem 'makandra_cucumber_factory', :lib => 'cucumber_factory', :source => 'http://gems.github.com'
+
+Create a step definition stub in <tt>features/step_definitions/factory_steps.rb, which just says
+    Cucumber::Factory.add_steps(this)
+
+== Example 
+
+The following will call {Movie.make}[http://github.com/notahat/machinist/tree/master], Movie.create! or Movie.new, depending on what's available:
+    Given there is a movie
+
+To create a new record with attributes set, you can say:
+    Given there is a movie with the title "Sunshine" and the year "2007"
+
+The following will also store the created record in <tt>@sunshine</tt>:
+    Given "Sunshine" is a movie with the title "Sunshine" and the year "2007"
+
+To set associations you can refer to other records by name:
+    Given "Before Sunrise" is a movie
+    And "Before Sunset" is a movie with the prequel "Before Sunrise"
+
+You can also refer to the last created object of a kind by saying "above":
+    Given there is a movie with the title "Before Sunrise"
+    And "Before Sunset" is a movie with the prequel above
+
+=== Credits
+
+Henning Koch
+
+{link www.makandra.de}[http://www.makandra.de/]
