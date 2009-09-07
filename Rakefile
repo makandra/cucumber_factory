@@ -28,7 +28,7 @@ begin
     gemspec.summary = "Create records from Cucumber features without writing step definitions."
     gemspec.email = "github@makandra.de"
     gemspec.homepage = "http://github.com/makandra/cucumber_factory"
-    gemspec.description = "Create records from Cucumber features without writing step definitions."
+    gemspec.description = "Cucumber Factory allows you to create ActiveRecord models from your Cucumber features without writing step definitions for each model."
     gemspec.authors = ["Henning Koch"]
   end
 rescue LoadError
