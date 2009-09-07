@@ -37,4 +37,4 @@ You can also refer to the last created object of a kind by saying "above":
 
 Henning Koch
 
-{link www.makandra.de}[http://www.makandra.de/]
+{www.makandra.de}[http://www.makandra.de/]
