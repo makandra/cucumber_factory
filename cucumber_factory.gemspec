@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cucumber_factory}
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Henning Koch"]
   s.date = %q{2009-09-07}
-  s.description = %q{Cucumber Factory allows you to create ActiveRecord models from your Cucumber features without writing step definitions for each model.}
+  s.description = %q{Create records from Cucumber features without writing step definitions.}
   s.email = %q{github@makandra.de}
   s.extra_rdoc_files = [
     "README.rdoc"
