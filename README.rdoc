@@ -9,7 +9,7 @@ Install the gem:
     sudo gem install makandra-cucumber_factory
 
 Add the following to your <tt>Initializer.run</tt> block in your <tt>environment.rb</tt>:
-    config.gem 'makandra_cucumber_factory', :lib => 'cucumber_factory', :source => 'http://gems.github.com'
+    config.gem 'makandra-cucumber_factory', :lib => 'cucumber_factory', :source => 'http://gems.github.com'
 
 Create a step definition stub in <tt>features/step_definitions/factory_steps.rb, which just says
     Cucumber::Factory.add_steps(this)
