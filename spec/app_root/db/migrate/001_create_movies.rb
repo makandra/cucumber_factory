@@ -6,6 +6,7 @@ class CreateMovies < ActiveRecord::Migration
       t.integer :year
       t.integer :prequel_id
       t.integer :reviewer_id
+      t.integer :box_office_result
     end
   end
 

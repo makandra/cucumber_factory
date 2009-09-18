@@ -31,7 +31,6 @@ describe Cucumber::Factory do
     before(:each) do
       @world = Object.new
     end
-
   
     it "should create records" do
       Movie.should_receive(:create!).with({})
@@ -43,6 +42,11 @@ describe Cucumber::Factory do
       Cucumber::Factory.parse(@world, 'Given there is a movie with the title "Sunshine" and the year "2007"')
     end
     
+    it "should create records with attributes containing spaces" do
+      Movie.should_receive(:create!).with({ :box_office_result => "99999999" })
+      Cucumber::Factory.parse(@world, 'Given there is a movie with the box office result "99999999"')
+    end
+        
     it "should set instance variables in the world" do
       Cucumber::Factory.parse(@world, 'Given "Sunshine" is a movie with the title "Sunshine" and the year "2007"')
       @world.instance_variable_get(:'@sunshine').title.should == "Sunshine"

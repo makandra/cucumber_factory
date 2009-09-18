@@ -46,7 +46,7 @@ module Cucumber
       if raw_attributes.present? && raw_attributes.strip.present?
         raw_attributes.scan(/(the|and|with| )+(.*?) ("([^\"]*)"|above)/).each do |fragment|
           value = nil
-          attribute = fragment[1].to_sym
+          attribute = fragment[1].gsub(" ", "_").to_sym
           value_type = fragment[2] # 'above' or a quoted string
           value = fragment[3]
           association = model_class.reflect_on_association(attribute)
