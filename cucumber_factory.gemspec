@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cucumber_factory}
-  s.version = "1.1.8"
+  s.version = "1.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Henning Koch"]
@@ -26,7 +26,9 @@ Gem::Specification.new do |s|
      "lib/cucumber_factory/factory.rb",
      "spec/app_root/app/controllers/application_controller.rb",
      "spec/app_root/app/models/job_offer.rb",
+     "spec/app_root/app/models/machinist_model.rb",
      "spec/app_root/app/models/movie.rb",
+     "spec/app_root/app/models/plain_ruby_class.rb",
      "spec/app_root/app/models/user.rb",
      "spec/app_root/config/boot.rb",
      "spec/app_root/config/database.yml",
@@ -39,7 +41,6 @@ Gem::Specification.new do |s|
      "spec/app_root/config/routes.rb",
      "spec/app_root/db/migrate/001_create_movies.rb",
      "spec/app_root/db/migrate/002_create_users.rb",
-     "spec/app_root/db/migrate/003_create_job_offers.rb",
      "spec/app_root/lib/console_with_fixtures.rb",
      "spec/app_root/log/.gitignore",
      "spec/app_root/script/console",
@@ -56,6 +57,8 @@ Gem::Specification.new do |s|
   s.test_files = [
     "spec/app_root/app/models/movie.rb",
      "spec/app_root/app/models/job_offer.rb",
+     "spec/app_root/app/models/machinist_model.rb",
+     "spec/app_root/app/models/plain_ruby_class.rb",
      "spec/app_root/app/models/user.rb",
      "spec/app_root/app/controllers/application_controller.rb",
      "spec/app_root/config/environment.rb",
@@ -67,7 +70,6 @@ Gem::Specification.new do |s|
      "spec/app_root/config/boot.rb",
      "spec/app_root/config/routes.rb",
      "spec/app_root/db/migrate/002_create_users.rb",
-     "spec/app_root/db/migrate/003_create_job_offers.rb",
      "spec/app_root/db/migrate/001_create_movies.rb",
      "spec/app_root/lib/console_with_fixtures.rb",
      "spec/factory_spec.rb",
