@@ -1,5 +1,11 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
+class Factory # for factory_girl compatibility spec
+  def self.factories
+    {}
+  end  
+end
+
 describe Cucumber::Factory do
 
   describe 'add_steps' do
@@ -41,13 +47,29 @@ describe Cucumber::Factory do
       @world = Object.new
     end
   
-    it "should create records" do
+    it "should create ActiveRecord models by calling #create!" do
       Movie.should_receive(:create!).with({})
       Cucumber::Factory.parse(@world, "Given there is a movie")
     end
+    
+    it "should create models that have a machinist blueprint by calling #make" do
+      MachinistModel.should_receive(:make).with({ :attribute => "foo"})
+      Cucumber::Factory.parse(@world, 'Given there is a machinist model with the attribute "foo"')
+    end
+    
+    it "should create models that have a factory_girl factory by calling #Factory.make(:model_name)" do
+      Factory.should_receive(:factories).with().and_return({ :job_offer => :job_offer_factory }) # Fake factory look up in factory_girl
+      Factory.should_receive(:create).with(:job_offer, { :title => "Awesome job" })
+      Cucumber::Factory.parse(@world, 'Given there is a job offer with the title "Awesome job"')
+    end
+    
+    it "should instantiate plain ruby classes by calling #new" do
+      PlainRubyClass.should_receive(:new).with({})
+      Cucumber::Factory.parse(@world, "Given there is a plain ruby class")
+    end
   
-    it "should create records for classes with multiple words" do
-      JobOffer.should_receive(:create!).with({})
+    it "should instantiate classes with multiple words in their name" do
+      JobOffer.should_receive(:new).with({})
       Cucumber::Factory.parse(@world, "Given there is a job offer")
     end
     

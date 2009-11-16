@@ -1,4 +1,4 @@
-class JobOffer
+class PlainRubyClass
   def initialize(options)
   end
 end

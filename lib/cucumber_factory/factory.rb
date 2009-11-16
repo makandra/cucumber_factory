@@ -49,7 +49,7 @@ module Cucumber
           attribute = fragment[1].gsub(" ", "_").to_sym
           value_type = fragment[2] # 'above' or a quoted string
           value = fragment[3]
-          association = model_class.reflect_on_association(attribute)
+          association = model_class.reflect_on_association(attribute) if model_class.respond_to?(:reflect_on_association)
           if association.present?
             if value_type == "above"
               value = association.klass.last or raise "There is no last #{attribute}"
@@ -75,12 +75,21 @@ module Cucumber
     end
     
     private
+    
+    def self.factory_girl_factory_name(model_class)
+      model_class.to_s.underscore.to_sym
+    end
 
     def self.create_record(model_class, attributes)
-      create_method = [:make, :create!, :new].detect do |method_name|
-        model_class.respond_to? method_name
+      factory_name = factory_girl_factory_name(model_class)
+      if defined?(::Factory) && factory = ::Factory.factories[factory_name]
+        ::Factory.create(factory_name, attributes)
+      else
+        create_method = [:make, :create!, :new].detect do |method_name|
+          model_class.respond_to? method_name
+        end
+        model_class.send(create_method, attributes)
       end
-      model_class.send(create_method, attributes)
     end
 
   end
