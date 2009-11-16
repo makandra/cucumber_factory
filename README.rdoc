@@ -16,7 +16,7 @@ Create a step definition stub in <tt>features/step_definitions/factory_steps.rb<
 
 == Example 
 
-The following will call {Movie.make}[http://github.com/notahat/machinist/tree/master], Movie.create! or Movie.new, depending on what's available:
+The following will call {Movie.make}[http://github.com/notahat/machinist], {Factory.create(:movie)}[http://github.com/thoughtbot/factory_girl], Movie.create! or Movie.new, depending on what's available:
     Given there is a movie
 
 To create a new record with attributes set, you can say:
@@ -32,6 +32,10 @@ To set associations you can refer to other records by name:
 You can also refer to the last created object of a kind by saying "above":
     Given there is a movie with the title "Before Sunrise"
     And "Before Sunset" is a movie with the prequel above
+
+== Factory support
+
+{Machinist blueprints}[http://github.com/notahat/machinist] and {factory_girl factories}[http://github.com/thoughtbot/factory_girl] will be used when available.
 
 === Credits
 
