@@ -1,0 +1,2 @@
+class Benutzer
+end

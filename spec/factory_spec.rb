@@ -72,6 +72,11 @@ describe Cucumber::Factory do
       JobOffer.should_receive(:new).with({})
       Cucumber::Factory.parse(@world, "Given there is a job offer")
     end
+  
+    it "should instantiate classes with uppercase characters in their name" do
+      Benutzer.should_receive(:new).with({})
+      Cucumber::Factory.parse(@world, "Given there is a Benutzer")
+    end
     
     it "should create records with attributes" do
       Movie.should_receive(:create!).with({ :title => "Sunshine", :year => "2007" })
@@ -81,6 +86,11 @@ describe Cucumber::Factory do
     it "should create records with attributes containing spaces" do
       Movie.should_receive(:create!).with({ :box_office_result => "99999999" })
       Cucumber::Factory.parse(@world, 'Given there is a movie with the box office result "99999999"')
+    end
+
+    it "should create records with attributes containing uppercase characters" do
+      Benutzer.should_receive(:create!).with({ :name => "Susanne" })
+      Cucumber::Factory.parse(@world, 'Given there is a Benutzer with the Name "Susanne"')
     end
         
     it "should set instance variables in the world" do
