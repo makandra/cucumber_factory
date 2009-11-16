@@ -36,12 +36,12 @@ module Cucumber
     
     def self.parse_named_creation(world, name, raw_model, raw_attributes)
       record = parse_creation(world, raw_model, raw_attributes)
-      variable = variable_name(name)
+      variable = variable_name_from_prose(name)
       world.instance_variable_set variable, record
     end
   
     def self.parse_creation(world, raw_model, raw_attributes)
-      model_class = raw_model.camelize.constantize
+      model_class = model_class_from_prose(raw_model)
       attributes = {}
       if raw_attributes.present? && raw_attributes.strip.present?
         raw_attributes.scan(/(the|and|with| )+(.*?) ("([^\"]*)"|above)/).each do |fragment|
@@ -54,7 +54,7 @@ module Cucumber
             if value_type == "above"
               value = association.klass.last or raise "There is no last #{attribute}"
             else
-              value = world.instance_variable_get(variable_name(value))
+              value = world.instance_variable_get(variable_name_from_prose(value))
             end
           end
           attributes[attribute] = value
@@ -63,7 +63,11 @@ module Cucumber
       create_record(model_class, attributes)
     end
     
-    def self.variable_name(prose)
+    def self.model_class_from_prose(prose)
+      prose.gsub(/[^a-z0-9_]+/, "_").camelize.constantize
+    end
+    
+    def self.variable_name_from_prose(prose)
       name = prose.downcase.gsub(/[^a-z0-9_]+/, '_')
       name = name.gsub(/^_+/, '').gsub(/_+$/, '')
       name = "_#{name}" unless name.length >= 0 && name =~ /^[a-z]/

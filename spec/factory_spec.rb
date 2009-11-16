@@ -11,17 +11,26 @@ describe Cucumber::Factory do
     end
     
   end
+  
+  describe 'model_class_from_prose' do
 
-  describe 'variable_name' do
+    it "should return the class matching a natural language expression" do
+      Cucumber::Factory.model_class_from_prose("movie").should == Movie
+      Cucumber::Factory.model_class_from_prose("job offer").should == JobOffer
+    end
+
+  end
+
+  describe 'variable_name_from_prose' do
   
     it "should translate natural language to instance variable names" do
-      Cucumber::Factory.variable_name("movie").should == :'@movie'
-      Cucumber::Factory.variable_name("Some Movie").should == :'@some_movie'
+      Cucumber::Factory.variable_name_from_prose("movie").should == :'@movie'
+      Cucumber::Factory.variable_name_from_prose("Some Movie").should == :'@some_movie'
     end
     
     it "should make sure the generated instance variable names are legal" do
-      Cucumber::Factory.variable_name("1973").should == :'@_1973'
-      Cucumber::Factory.variable_name("%$§").should == :'@_'
+      Cucumber::Factory.variable_name_from_prose("1973").should == :'@_1973'
+      Cucumber::Factory.variable_name_from_prose("%$§").should == :'@_'
     end
     
   end
@@ -35,6 +44,11 @@ describe Cucumber::Factory do
     it "should create records" do
       Movie.should_receive(:create!).with({})
       Cucumber::Factory.parse(@world, "Given there is a movie")
+    end
+  
+    it "should create records for classes with multiple words" do
+      JobOffer.should_receive(:create!).with({})
+      Cucumber::Factory.parse(@world, "Given there is a job offer")
     end
     
     it "should create records with attributes" do
