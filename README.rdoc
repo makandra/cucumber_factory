@@ -5,11 +5,11 @@ Cucumber Factory allows you to create ActiveRecord objects directly from your {C
 == Installation
 
 Install the gem:
-    sudo gem sources -a http://gems.github.com
-    sudo gem install makandra-cucumber_factory
+    sudo gem sources -a http://gemcutter.org
+    sudo gem install cucumber_factory
 
 Add the following to your <tt>Initializer.run</tt> block in your <tt>environment.rb</tt>:
-    config.gem 'makandra-cucumber_factory', :lib => 'cucumber_factory', :source => 'http://gems.github.com'
+    config.gem 'cucumber_factory', :source => 'http://gemcutter.org'
 
 Create a step definition stub in <tt>features/step_definitions/factory_steps.rb</tt>, which just says
     Cucumber::Factory.add_steps(self)
