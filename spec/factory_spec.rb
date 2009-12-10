@@ -47,8 +47,10 @@ describe Cucumber::Factory do
       @world = Object.new
     end
   
-    it "should create ActiveRecord models by calling #create!" do
-      Movie.should_receive(:create!).with({})
+    it "should create ActiveRecord models by calling #new and #save!" do
+      movie = Movie.new
+      Movie.should_receive(:new).with().and_return(movie)
+      movie.should_receive(:save!)
       Cucumber::Factory.parse(@world, "Given there is a movie")
     end
     
@@ -74,25 +76,44 @@ describe Cucumber::Factory do
     end
   
     it "should instantiate classes with uppercase characters in their name" do
-      Benutzer.should_receive(:new).with({})
-      Cucumber::Factory.parse(@world, "Given there is a Benutzer")
+      user = User.new
+      User.should_receive(:new).and_return(user)
+      Cucumber::Factory.parse(@world, "Given there is a User")
+    end
+  
+    it "should allow either 'a' or 'an' for the article" do
+      Opera.should_receive(:new).with({})
+      Cucumber::Factory.parse(@world, "Given there is an opera")
     end
     
     it "should create records with attributes" do
-      Movie.should_receive(:create!).with({ :title => "Sunshine", :year => "2007" })
+      movie = Movie.new
+      Movie.stub(:new => movie)
+      movie.should_receive(:"attributes=").with({ :title => "Sunshine", :year => "2007" }, false)
       Cucumber::Factory.parse(@world, 'Given there is a movie with the title "Sunshine" and the year "2007"')
     end
     
     it "should create records with attributes containing spaces" do
-      Movie.should_receive(:create!).with({ :box_office_result => "99999999" })
+      movie = Movie.new
+      Movie.stub(:new => movie)
+      movie.should_receive(:"attributes=").with({ :box_office_result => "99999999" }, false)
       Cucumber::Factory.parse(@world, 'Given there is a movie with the box office result "99999999"')
     end
 
     it "should create records with attributes containing uppercase characters" do
-      Benutzer.should_receive(:create!).with({ :name => "Susanne" })
-      Cucumber::Factory.parse(@world, 'Given there is a Benutzer with the Name "Susanne"')
+      user = User.new
+      User.stub(:new => user)
+      user.should_receive(:"attributes=").with({ :name => "Susanne" }, false)
+      Cucumber::Factory.parse(@world, 'Given there is a User with the Name "Susanne"')
     end
         
+    it "should override attr_accessible protection" do
+      Cucumber::Factory.parse(@world, 'Given there is a payment with the amount "120" and the comment "Thanks for lending"')
+      payment = Payment.last
+      payment.amount.should == 120
+      payment.comment.should == 'Thanks for lending'
+    end
+
     it "should set instance variables in the world" do
       Cucumber::Factory.parse(@world, 'Given "Sunshine" is a movie with the title "Sunshine" and the year "2007"')
       @world.instance_variable_get(:'@sunshine').title.should == "Sunshine"

@@ -12,11 +12,11 @@ module Cucumber
     def self.steps
       [
         [
-          /^"([^\"]*)" is a (.+?)( with the .+?)?$/, 
+          /^"([^\"]*)" is an? (.+?)( with the .+?)?$/, 
           lambda { |name, raw_model, raw_attributes| Cucumber::Factory.parse_named_creation(self, name, raw_model, raw_attributes) }
         ],
         [
-          /^there is a (.+?)( with the .+?)?$/,
+          /^there is an? (.+?)( with the .+?)?$/,
           lambda { |raw_model, raw_attributes| Cucumber::Factory.parse_creation(self, raw_model, raw_attributes) }
         ]
       ]
@@ -86,11 +86,15 @@ module Cucumber
       factory_name = factory_girl_factory_name(model_class)
       if defined?(::Factory) && factory = ::Factory.factories[factory_name]
         ::Factory.create(factory_name, attributes)
+      elsif model_class.respond_to?(:make) # Machinist blueprint
+        model_class.make(attributes)
+      elsif model_class.respond_to?(:create!) # Plain ActiveRecord
+        model = model_class.new
+        model.send(:attributes=, attributes, false) # ignore attr_accessible
+        model.save!
+        model
       else
-        create_method = [:make, :create!, :new].detect do |method_name|
-          model_class.respond_to? method_name
-        end
-        model_class.send(create_method, attributes)
+        model_class.new(attributes)
       end
     end
 

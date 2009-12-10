@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cucumber_factory}
-  s.version = "1.2.0"
+  s.version = "1.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Henning Koch"]
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
      "lib/cucumber_factory.rb",
      "lib/cucumber_factory/factory.rb",
      "spec/app_root/app/controllers/application_controller.rb",
+     "spec/app_root/app/models/benutzer.rb",
      "spec/app_root/app/models/job_offer.rb",
      "spec/app_root/app/models/machinist_model.rb",
      "spec/app_root/app/models/movie.rb",
@@ -55,7 +56,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{Create records from Cucumber features without writing step definitions.}
   s.test_files = [
-    "spec/app_root/app/models/movie.rb",
+    "spec/app_root/app/models/benutzer.rb",
+     "spec/app_root/app/models/movie.rb",
      "spec/app_root/app/models/job_offer.rb",
      "spec/app_root/app/models/machinist_model.rb",
      "spec/app_root/app/models/plain_ruby_class.rb",
