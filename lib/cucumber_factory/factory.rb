@@ -12,12 +12,12 @@ module Cucumber
     def self.steps
       [
         [
-          /^"([^\"]*)" is an? (.+?)( with the .+?)?$/, 
-          lambda { |name, raw_model, raw_attributes| Cucumber::Factory.parse_named_creation(self, name, raw_model, raw_attributes) }
+          /^"([^\"]*)" is an? (.+?)( \(.+?\))?( with the .+?)?$/, 
+          lambda { |name, raw_model, raw_variant, raw_attributes| Cucumber::Factory.parse_named_creation(self, name, raw_model, raw_variant, raw_attributes) }
         ],
         [
-          /^there is an? (.+?)( with the .+?)?$/,
-          lambda { |raw_model, raw_attributes| Cucumber::Factory.parse_creation(self, raw_model, raw_attributes) }
+          /^there is an? (.+?)( \(.+?\))?( with the .+?)?$/,
+          lambda { |raw_model, raw_variant, raw_attributes| Cucumber::Factory.parse_creation(self, raw_model, raw_variant, raw_attributes) }
         ]
       ]
     end
@@ -34,13 +34,13 @@ module Cucumber
       raise "No step definition for: #{command}"
     end
     
-    def self.parse_named_creation(world, name, raw_model, raw_attributes)
-      record = parse_creation(world, raw_model, raw_attributes)
+    def self.parse_named_creation(world, name, raw_model, raw_variant, raw_attributes)
+      record = parse_creation(world, raw_model, raw_variant, raw_attributes)
       variable = variable_name_from_prose(name)
       world.instance_variable_set variable, record
     end
   
-    def self.parse_creation(world, raw_model, raw_attributes)
+    def self.parse_creation(world, raw_model, raw_variant, raw_attributes)
       model_class = model_class_from_prose(raw_model)
       attributes = {}
       if raw_attributes.present? && raw_attributes.strip.present?
@@ -60,7 +60,8 @@ module Cucumber
           attributes[attribute] = value
         end
       end
-      create_record(model_class, attributes)
+      variant = raw_variant.present? && /\((.*?)\)/.match(raw_variant)[1]
+      create_record(model_class, variant, attributes)
     end
     
     def self.model_class_from_prose(prose)
@@ -81,13 +82,17 @@ module Cucumber
     def self.factory_girl_factory_name(model_class)
       model_class.to_s.underscore.to_sym
     end
-
-    def self.create_record(model_class, attributes)
+    
+    def self.create_record(model_class, variant, attributes)
       factory_name = factory_girl_factory_name(model_class)
       if defined?(::Factory) && factory = ::Factory.factories[factory_name]
         ::Factory.create(factory_name, attributes)
       elsif model_class.respond_to?(:make) # Machinist blueprint
-        model_class.make(attributes)
+        if variant.present?
+          model_class.make(variant.to_sym, attributes)
+        else
+          model_class.make(attributes)
+        end
       elsif model_class.respond_to?(:create!) # Plain ActiveRecord
         model = model_class.new
         model.send(:attributes=, attributes, false) # ignore attr_accessible
