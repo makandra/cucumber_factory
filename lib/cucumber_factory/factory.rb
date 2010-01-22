@@ -60,7 +60,7 @@ module Cucumber
           attributes[attribute] = value
         end
       end
-      variant = raw_variant.present? && /\((.*?)\)/.match(raw_variant)[1]
+      variant = raw_variant.present? && /\((.*?)\)/.match(raw_variant)[1].downcase.gsub(" ", "_")
       create_record(model_class, variant, attributes)
     end
     

@@ -64,6 +64,11 @@ describe Cucumber::Factory do
       Cucumber::Factory.parse(@world, 'Given there is a machinist model (variant) with the attribute "foo"')
     end
     
+    it "should be able to invoke machinist blueprint variants containing spaces or uppercase characters in prose" do
+      MachinistModel.should_receive(:make).with(:variant_mark_two, { :attribute => "foo"})
+      Cucumber::Factory.parse(@world, 'Given there is a machinist model (Variant Mark Two) with the attribute "foo"')
+    end
+    
     it "should create models that have a factory_girl factory by calling #Factory.make(:model_name)" do
       Factory.should_receive(:factories).with().and_return({ :job_offer => :job_offer_factory }) # Fake factory look up in factory_girl
       Factory.should_receive(:create).with(:job_offer, { :title => "Awesome job" })
