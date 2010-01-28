@@ -52,7 +52,8 @@ module Cucumber
           association = model_class.reflect_on_association(attribute) if model_class.respond_to?(:reflect_on_association)
           if association.present?
             if value_type == "above"
-              value = association.klass.last or raise "There is no last #{attribute}"
+              # Don't use class.last, in sqlite that is not always the last inserted element
+              value = association.klass.find(:last, :order => "id") or raise "There is no last #{attribute}"
             else
               value = world.instance_variable_get(variable_name_from_prose(value))
             end

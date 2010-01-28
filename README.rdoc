@@ -37,6 +37,12 @@ You can also refer to the last created object of a kind by saying "above":
 
 {Machinist blueprints}[http://github.com/notahat/machinist] and {factory_girl factories}[http://github.com/thoughtbot/factory_girl] will be used when available.
 
+You can use named Machinist blueprint such as <tt>Movie.blueprint(:comedy)</tt> like this:
+
+    Given a movie (comedy) with the title "Groundhog Day"
+
+Inherited factory_girl factories are not supported yet.
+
 === Credits
 
 Henning Koch
