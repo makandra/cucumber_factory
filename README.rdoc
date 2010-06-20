@@ -43,6 +43,18 @@ You can use named Machinist blueprint such as <tt>Movie.blueprint(:comedy)</tt> 
 
 Inherited factory_girl factories are not supported yet.
 
+== Overriding factory steps
+
+If you want to override a factory step with your own version, just do so:
+
+    Given /^there is a movie with good actors$/ do
+      movie = Movie.make
+      movie.actors << Actor.make(:name => 'Clive Owen')
+      movie.actors << Actor.make(:name => 'Denzel Washington')
+    end
+
+Custom steps will always be preferred over factory steps. Also Cucumber will not raise a warning about ambiguous steps if the only other matching step is a factory step.
+
 === Credits
 
 Henning Koch
