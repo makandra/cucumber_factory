@@ -2,18 +2,6 @@
 
 Cucumber Factory allows you to create ActiveRecord objects directly from your {Cucumber}[http://cukes.info/] features. No step definitions required.
 
-== Installation
-
-Install the gem:
-    sudo gem sources -a http://gemcutter.org
-    sudo gem install cucumber_factory
-
-Add the following to your <tt>Initializer.run</tt> block in your <tt>environment.rb</tt>:
-    config.gem 'cucumber_factory', :source => 'http://gemcutter.org'
-
-Create a step definition stub in <tt>features/step_definitions/factory_steps.rb</tt>, which just says
-    Cucumber::Factory.add_steps(self)
-
 == Example 
 
 The following will call {Movie.make}[http://github.com/notahat/machinist], {Factory.create(:movie)}[http://github.com/thoughtbot/factory_girl], Movie.create! or Movie.new, depending on what's available:
@@ -54,6 +42,26 @@ If you want to override a factory step with your own version, just do so:
     end
 
 Custom steps will always be preferred over factory steps. Also Cucumber will not raise a warning about ambiguous steps if the only other matching step is a factory step.
+
+== Installation and setup
+
+Cucumber Factory is a gem, which you can install with
+    sudo gem install cucumber_factory
+
+In Rails 2, add the following to your <tt>environment.rb</tt>:
+    config.gem 'cucumber_factory'
+
+In Rails 3, add the following to your <tt>Gemfile</tt>:
+    gem 'cucumber_factory'
+
+Finally, create a file <tt>features/step_definitions/factory_steps.rb</tt>, which just says
+    Cucumber::Factory.add_steps(self)
+
+
+== Rails 3 compatibility
+
+We cannot guarantee Rails 3 compatibility at this point, but we will upgrade the gem when Rails 3 is released.
+
 
 === Credits
 
