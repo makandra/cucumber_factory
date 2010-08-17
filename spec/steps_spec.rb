@@ -71,6 +71,14 @@ describe 'steps provided by cucumber_factory' do
     @step_mother.invoke('there is a movie with the title "Sunshine" and the year "2007"')
   end
 
+  it "should apply Cucumber transforms to attribute values" do
+    movie = Movie.new
+    Movie.stub(:new => movie)
+    @world.should_receive(:Transform).with("value").and_return("transformed value")
+    movie.should_receive(:"attributes=").with({ :title => "transformed value" }, false)
+    @step_mother.invoke('there is a movie with the title "value"')
+  end
+
   it "should create records with attributes containing spaces" do
     movie = Movie.new
     Movie.stub(:new => movie)
@@ -94,13 +102,13 @@ describe 'steps provided by cucumber_factory' do
 
   it "should set instance variables in the world" do
     @step_mother.invoke('"Sunshine" is a movie with the title "Sunshine" and the year "2007"')
-    @language.current_world.instance_variable_get(:'@sunshine').title.should == "Sunshine"
+    @world.instance_variable_get(:'@sunshine').title.should == "Sunshine"
   end
 
   it "should understand pointers to instance variables" do
     @step_mother.invoke('"Before Sunrise" is a movie with the title "Before Sunrise"')
     @step_mother.invoke('"Before Sunset" is a movie with the title "Before Sunset" and the prequel "Before Sunrise"')
-    @language.current_world.instance_variable_get(:'@before_sunset').prequel.title.should == "Before Sunrise"
+    @world.instance_variable_get(:'@before_sunset').prequel.title.should == "Before Sunrise"
   end
 
   it "should allow to point to a previously created record through 'above'" do

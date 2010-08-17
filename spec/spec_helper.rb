@@ -21,8 +21,11 @@ end
 
 def prepare_cucumber_example
   @step_mother = Cucumber::StepMother.new
-  @language = @step_mother.load_programming_language('rb')
-  @dsl = Object.new
-  @dsl.extend(Cucumber::RbSupport::RbDsl)
-  Cucumber::Factory.add_steps(@dsl)
+  language = @step_mother.load_programming_language('rb')
+  scenario = stub('scenario', :language => 'en')
+  language.send(:begin_scenario, scenario)
+  @world = language.current_world
+  @main = Object.new
+  @main.extend(Cucumber::RbSupport::RbDsl)
+  Cucumber::Factory.add_steps(@main)
 end

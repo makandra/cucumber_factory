@@ -5,10 +5,10 @@ module Cucumber
       # List of Cucumber step definitions created by #add_steps
       attr_reader :step_definitions
 
-      def add_steps(dsl)
+      def add_steps(main)
         @step_definitions = []
         steps.each do |step|
-          @step_definitions << (dsl.instance_eval do
+          @step_definitions << (main.instance_eval do
             Given(step[:pattern], &step[:action])
           end)
         end
@@ -57,6 +57,8 @@ module Cucumber
               else
                 value = world.instance_variable_get(variable_name_from_prose(value))
               end
+            else
+              value = world.Transform(value)
             end
             attributes[attribute] = value
           end
