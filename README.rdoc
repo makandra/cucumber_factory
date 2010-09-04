@@ -21,8 +21,8 @@ You can also refer to the last created object of a kind by saying "above":
     Given there is a movie with the title "Before Sunrise"
     And "Before Sunset" is a movie with the prequel above
 
-Boolean attributes can be set like this
-    Given there is a movie that is awesome
+Boolean attributes can be set by appending "which", "that" or "who" at the end:
+    Given there is a movie which is awesome
     And there is a movie with the name "Sunshine" that is not a comedy
     And there is a director who is popular 
 
