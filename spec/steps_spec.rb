@@ -115,9 +115,49 @@ describe 'steps provided by cucumber_factory' do
     @step_mother.invoke('there is a user with the name "Jane"')
     @step_mother.invoke('there is a movie with the title "Before Sunrise"')
     @step_mother.invoke('there is a movie with the title "Before Sunset" and the reviewer above and the prequel above')
-    @before_sunset = Movie.find_by_title!("Before Sunset")
-    @before_sunset.prequel.title.should == "Before Sunrise"
-    @before_sunset.reviewer.name.should == "Jane"
+    before_sunset = Movie.find_by_title!("Before Sunset")
+    before_sunset.prequel.title.should == "Before Sunrise"
+    before_sunset.reviewer.name.should == "Jane"
+  end
+
+  it "should allow to set positive boolean attributes with which/who after the attribute list" do
+    @step_mother.invoke('there is a user with the name "Jane" who is deleted')
+    @step_mother.invoke('there is a user with the name "Jack" which is deleted')
+    jane = User.find_by_name!('Jane')
+    jane.name.should == 'Jane'
+    jane.deleted.should equal(true)
+    jack = User.find_by_name!('Jack')
+    jack.name.should == 'Jack'
+    jack.deleted.should equal(true)
+  end
+
+  it "should allow to set boolean attributes without regular attributes preceding them" do
+    @step_mother.invoke('there is a user who is deleted')
+    jane = User.find(:last, :order => 'id')
+    jane.deleted.should equal(true)
+  end
+
+  it "should allow to set negative boolean attribute" do
+    @step_mother.invoke('there is a user who is not deleted')
+    jane = User.find(:last, :order => 'id')
+    jane.deleted.should equal(false)
+  end
+
+  it "should allow to set multiple boolean attributes" do
+    @step_mother.invoke('there is a user who is locked and not deleted and subscribed')
+    jane = User.find(:last, :order => 'id')
+    jane.locked.should equal(true)
+    jane.deleted.should equal(false)
+    jane.subscribed.should equal(true)
+  end
+
+  it "should allow to set boolean attributes that are named from multiple words" do
+    @step_mother.invoke('there is a user who is locked and not scared and scared by spiders and deleted')
+    jane = User.find(:last, :order => 'id')
+    jane.locked.should equal(true)
+    jane.scared.should equal(false)
+    jane.scared_by_spiders.should equal(true)
+    jane.deleted.should equal(true)
   end
 
 end

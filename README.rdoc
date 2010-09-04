@@ -2,7 +2,7 @@
 
 Cucumber Factory allows you to create ActiveRecord objects directly from your {Cucumber}[http://cukes.info/] features. No step definitions required.
 
-== Example 
+== Examples
 
 The following will call {Movie.make}[http://github.com/notahat/machinist], {Factory.create(:movie)}[http://github.com/thoughtbot/factory_girl], Movie.create! or Movie.new, depending on what's available:
     Given there is a movie
@@ -20,6 +20,11 @@ To set associations you can refer to other records by name:
 You can also refer to the last created object of a kind by saying "above":
     Given there is a movie with the title "Before Sunrise"
     And "Before Sunset" is a movie with the prequel above
+
+Boolean attributes can be set like this
+    Given there is a movie that is awesome
+    And there is a movie with the name "Sunshine" that is not a comedy
+    And there is a director who is popular 
 
 == Factory support
 
