@@ -34,7 +34,7 @@ module Cucumber
         model_class = model_class_from_prose(raw_model)
         attributes = {}
         if raw_attributes.try(:strip).present?
-          raw_attributes.scan(/(?:the|and|with| )+(.*?) ("([^\"]*)"|above)/).each do |fragment|
+          raw_attributes.scan(/(?:the|and|with|but|,| )+(.*?) ("([^\"]*)"|above)/).each do |fragment|
             attribute = attribute_name_from_prose(fragment[0])
             value_type = fragment[1] # 'above' or a quoted string
             value = fragment[2] # the value string without quotes
@@ -42,7 +42,7 @@ module Cucumber
           end
         end
         if raw_boolean_attributes.try(:strip).present?
-          raw_boolean_attributes.scan(/(?:which|who|that|is| )*(not )?(.+?)(?: and |$)/).each do |fragment|
+          raw_boolean_attributes.scan(/(?:which|who|that|is| )*(not )?(.+?)(?: and | but |,|$)+/).each do |fragment|
             flag = !fragment[0] # if not ain't there, this is true
             attribute = attribute_name_from_prose(fragment[1])
             attributes[attribute] = flag

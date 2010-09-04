@@ -24,7 +24,11 @@ You can also refer to the last created object of a kind by saying "above":
 Boolean attributes can be set by appending "which", "that" or "who" at the end:
     Given there is a movie which is awesome
     And there is a movie with the name "Sunshine" that is not a comedy
-    And there is a director who is popular 
+    And there is a director who is popular
+
+Instead of "and" you can also use "but" and commas to join sentences:
+  Given there is a movie which is awesome, popular and successful but not science fiction
+    And there is a director with the income "500000" but with the account balance "-30000"
 
 == Factory support
 

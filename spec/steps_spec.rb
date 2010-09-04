@@ -71,6 +71,13 @@ describe 'steps provided by cucumber_factory' do
     @step_mother.invoke('there is a movie with the title "Sunshine" and the year "2007"')
   end
 
+  it "should allow to join attribute lists with 'and's, commas and 'but's" do
+    movie = Movie.new
+    Movie.stub(:new => movie)
+    movie.should_receive(:"attributes=").with({ :title => "Sunshine", :year => "2007", :box_office_result => "32000000" }, false)
+    @step_mother.invoke('there is a movie with the title "Sunshine", the year "2007" but with the box office result "32000000"')
+  end
+
   it "should apply Cucumber transforms to attribute values" do
     movie = Movie.new
     Movie.stub(:new => movie)
@@ -156,6 +163,15 @@ describe 'steps provided by cucumber_factory' do
     jane = User.find(:last, :order => 'id')
     jane.locked.should equal(true)
     jane.scared.should equal(false)
+    jane.scared_by_spiders.should equal(true)
+    jane.deleted.should equal(true)
+  end
+
+  it "should allow to join boolean attribute lists with 'and's, commas and 'but's" do
+    @step_mother.invoke('there is a user who is locked, scared, but scared by spiders and deleted')
+    jane = User.find(:last, :order => 'id')
+    jane.locked.should equal(true)
+    jane.scared.should equal(true)
     jane.scared_by_spiders.should equal(true)
     jane.deleted.should equal(true)
   end
