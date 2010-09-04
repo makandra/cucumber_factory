@@ -27,7 +27,7 @@ Boolean attributes can be set by appending "which", "that" or "who" at the end:
     And there is a director who is popular
 
 Instead of "and" you can also use "but" and commas to join sentences:
-  Given there is a movie which is awesome, popular and successful but not science fiction
+    Given there is a movie which is awesome, popular and successful but not science fiction
     And there is a director with the income "500000" but with the account balance "-30000"
 
 == Factory support
