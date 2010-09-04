@@ -127,53 +127,60 @@ describe 'steps provided by cucumber_factory' do
     before_sunset.reviewer.name.should == "Jane"
   end
 
-  it "should allow to set positive boolean attributes with which/who after the attribute list" do
+  it "should allow to set positive boolean attributes with 'who' after the attribute list" do
+    user = User.new
+    User.stub(:new => user)
+    user.should_receive(:attributes=).with({ :name => 'Jane', :deleted => true }, false)
     @step_mother.invoke('there is a user with the name "Jane" who is deleted')
-    @step_mother.invoke('there is a user with the name "Jack" which is deleted')
-    jane = User.find_by_name!('Jane')
-    jane.name.should == 'Jane'
-    jane.deleted.should equal(true)
-    jack = User.find_by_name!('Jack')
-    jack.name.should == 'Jack'
-    jack.deleted.should equal(true)
+  end
+
+  it "should allow to set positive boolean attributes with 'which' after the attribute list" do
+    user = User.new
+    User.stub(:new => user)
+    user.should_receive(:attributes=).with({ :name => 'Jane', :deleted => true }, false)
+    @step_mother.invoke('there is a user with the name "Jane" which is deleted')
+  end
+
+  it "should allow to set positive boolean attributes with 'that' after the attribute list" do
+    user = User.new
+    User.stub(:new => user)
+    user.should_receive(:attributes=).with({ :name => 'Jane', :deleted => true }, false)
+    @step_mother.invoke('there is a user with the name "Jane" that is deleted')
   end
 
   it "should allow to set boolean attributes without regular attributes preceding them" do
+    user = User.new
+    User.stub(:new => user)
+    user.should_receive(:attributes=).with({ :deleted => true }, false)
     @step_mother.invoke('there is a user who is deleted')
-    jane = User.find(:last, :order => 'id')
-    jane.deleted.should equal(true)
   end
 
   it "should allow to set negative boolean attribute" do
+    user = User.new
+    User.stub(:new => user)
+    user.should_receive(:attributes=).with({ :deleted => false }, false)
     @step_mother.invoke('there is a user who is not deleted')
-    jane = User.find(:last, :order => 'id')
-    jane.deleted.should equal(false)
   end
 
   it "should allow to set multiple boolean attributes" do
+    user = User.new
+    User.stub(:new => user)
+    user.should_receive(:attributes=).with({ :locked => true, :deleted => false, :subscribed => true }, false)
     @step_mother.invoke('there is a user who is locked and not deleted and subscribed')
-    jane = User.find(:last, :order => 'id')
-    jane.locked.should equal(true)
-    jane.deleted.should equal(false)
-    jane.subscribed.should equal(true)
   end
 
   it "should allow to set boolean attributes that are named from multiple words" do
+    user = User.new
+    User.stub(:new => user)
+    user.should_receive(:attributes=).with({ :locked => true, :scared => false, :scared_by_spiders => true, :deleted => true }, false)
     @step_mother.invoke('there is a user who is locked and not scared and scared by spiders and deleted')
-    jane = User.find(:last, :order => 'id')
-    jane.locked.should equal(true)
-    jane.scared.should equal(false)
-    jane.scared_by_spiders.should equal(true)
-    jane.deleted.should equal(true)
   end
 
   it "should allow to join boolean attribute lists with 'and's, commas and 'but's" do
+    user = User.new
+    User.stub(:new => user)
+    user.should_receive(:attributes=).with({ :locked => true, :scared => true, :scared_by_spiders => true, :deleted => true }, false)
     @step_mother.invoke('there is a user who is locked, scared, but scared by spiders and deleted')
-    jane = User.find(:last, :order => 'id')
-    jane.locked.should equal(true)
-    jane.scared.should equal(true)
-    jane.scared_by_spiders.should equal(true)
-    jane.deleted.should equal(true)
   end
 
 end
