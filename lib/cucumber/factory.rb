@@ -75,7 +75,7 @@ module Cucumber
 
       def model_class_from_prose(prose)
         # don't use \w which depends on the system locale
-        prose.gsub(/[^A-Za-z0-9_]+/, "_").camelize.constantize
+        prose.gsub(/[^A-Za-z0-9_\/]+/, "_").camelize.constantize
       end
       
       def variable_name_from_prose(prose)

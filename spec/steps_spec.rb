@@ -59,6 +59,12 @@ describe 'steps provided by cucumber_factory' do
     @step_mother.invoke("there is a User")
   end
 
+  it "should instantiate namespaced classes" do
+    actor = People::Actor.new
+    People::Actor.should_receive(:new).and_return(actor)
+    @step_mother.invoke("there is a people/actor")
+  end
+
   it "should allow either 'a' or 'an' for the article" do
     Opera.should_receive(:new).with({})
     @step_mother.invoke("there is an opera")

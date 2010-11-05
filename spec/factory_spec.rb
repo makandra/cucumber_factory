@@ -19,6 +19,10 @@ describe Cucumber::Factory do
       Cucumber::Factory.send(:model_class_from_prose, "job offer").should == JobOffer
     end
 
+    it "should allow namespaced models" do
+      Cucumber::Factory.send(:model_class_from_prose, "people/actor").should == People::Actor
+    end
+
   end
 
   describe 'variable_name_from_prose' do
