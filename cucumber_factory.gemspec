@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cucumber_factory}
-  s.version = "1.7.0"
+  s.version = "1.7.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Henning Koch"]
-  s.date = %q{2010-09-04}
+  s.date = %q{2010-11-05}
   s.description = %q{Cucumber Factory allows you to create ActiveRecord models from your Cucumber features without writing step definitions for each model.}
   s.email = %q{github@makandra.de}
   s.extra_rdoc_files = [
@@ -17,6 +17,8 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".gitignore",
+     "Gemfile",
+     "Gemfile.lock",
      "MIT-LICENSE",
      "README.rdoc",
      "Rakefile",
@@ -31,6 +33,7 @@ Gem::Specification.new do |s|
      "spec/app_root/app/models/movie.rb",
      "spec/app_root/app/models/opera.rb",
      "spec/app_root/app/models/payment.rb",
+     "spec/app_root/app/models/people/actor.rb",
      "spec/app_root/app/models/plain_ruby_class.rb",
      "spec/app_root/app/models/user.rb",
      "spec/app_root/config/boot.rb",
@@ -45,6 +48,7 @@ Gem::Specification.new do |s|
      "spec/app_root/db/migrate/001_create_movies.rb",
      "spec/app_root/db/migrate/002_create_users.rb",
      "spec/app_root/db/migrate/003_create_payments.rb",
+     "spec/app_root/db/migrate/004_create_actors.rb",
      "spec/app_root/lib/console_with_fixtures.rb",
      "spec/app_root/log/.gitignore",
      "spec/app_root/script/console",
@@ -69,6 +73,7 @@ Gem::Specification.new do |s|
      "spec/app_root/app/models/payment.rb",
      "spec/app_root/app/models/plain_ruby_class.rb",
      "spec/app_root/app/models/user.rb",
+     "spec/app_root/app/models/people/actor.rb",
      "spec/app_root/config/boot.rb",
      "spec/app_root/config/environment.rb",
      "spec/app_root/config/environments/in_memory.rb",
@@ -80,11 +85,12 @@ Gem::Specification.new do |s|
      "spec/app_root/db/migrate/001_create_movies.rb",
      "spec/app_root/db/migrate/002_create_users.rb",
      "spec/app_root/db/migrate/003_create_payments.rb",
+     "spec/app_root/db/migrate/004_create_actors.rb",
      "spec/app_root/lib/console_with_fixtures.rb",
      "spec/spec_helper.rb",
      "spec/step_mother_ext_spec.rb",
-     "spec/steps_spec.rb",
-     "spec/factory_spec.rb"
+     "spec/factory_spec.rb",
+     "spec/steps_spec.rb"
   ]
 
   if s.respond_to? :specification_version then
