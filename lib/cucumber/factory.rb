@@ -86,14 +86,14 @@ module Cucumber
         :"@#{name}"
       end
       
-      def factory_girl_factory_name(model_class)
-        model_class.to_s.underscore.to_sym
+      def factory_girl_factory_name(name)
+        name.to_s.underscore.to_sym
       end
       
       def create_record(model_class, variant, attributes)
-        factory_name = factory_girl_factory_name(model_class)
-        if defined?(::Factory) && factory = ::Factory.factories[factory_name]
-          ::Factory.create(factory_name, attributes)
+        fg_factory_name = factory_girl_factory_name(variant || model_class)
+        if defined?(::Factory) && factory = ::Factory.factories[fg_factory_name]
+          ::Factory.create(fg_factory_name, attributes)
         elsif model_class.respond_to?(:make) # Machinist blueprint
           if variant.present?
             model_class.make(variant.to_sym, attributes)

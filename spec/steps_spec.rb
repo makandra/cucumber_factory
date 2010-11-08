@@ -43,6 +43,12 @@ describe 'steps provided by cucumber_factory' do
     @step_mother.invoke('there is a job offer with the title "Awesome job"')
   end
 
+  it "should create model variants that have a factory_girl factory by calling #Factory.make(:variant_name)" do
+    Factory.should_receive(:factories).with().and_return({ :tempting_job_offer => :tempting_job_offer_factory }) # Fake factory look up in factory_girl
+    Factory.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
+    @step_mother.invoke('there is a job offer (tempting job offer) with the title "Awesomafiablyfantasmic job"')
+  end
+
   it "should instantiate plain ruby classes by calling #new" do
     PlainRubyClass.should_receive(:new).with({})
     @step_mother.invoke("there is a plain ruby class")

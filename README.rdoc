@@ -38,8 +38,6 @@ You can use named Machinist blueprint such as <tt>Movie.blueprint(:comedy)</tt> 
 
     Given a movie (comedy) with the title "Groundhog Day"
 
-Inherited factory_girl factories are not supported yet.
-
 == Overriding factory steps
 
 If you want to override a factory step with your own version, just do so:
