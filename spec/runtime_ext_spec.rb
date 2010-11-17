@@ -11,9 +11,11 @@ describe Cucumber::Runtime, 'extended with cucumber_factory' do
 
   describe 'step_match' do
 
-    it "should not raise an ambiguous step error and return the user step if the only other matching step is a factory step" do
+    it "should not raise an ambiguous step error and match the user step if the only other matching step is a factory step" do
       user_step = @main.Given(/^there is a movie with a funny tone/){}
-      @runtime.step_match('there is a movie with a funny tone').should == user_step
+      match = @runtime.step_match('there is a movie with a funny tone')
+      match.step_definition.should == user_step
+      match.should be_a(Cucumber::StepMatch)
     end
 
     it "should still raise an ambiguous step error if more than two non-factory steps match" do

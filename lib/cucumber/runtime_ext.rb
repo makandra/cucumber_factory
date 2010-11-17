@@ -20,9 +20,11 @@ module Cucumber
     def step_match_with_factory_priority(*args)
       step_match_without_factory_priority(*args)
     rescue Ambiguous => e
-      matched_definitions = e.matches.collect(&:step_definition)
-      if matched_definitions.size == 2 && (Cucumber::Factory.step_definitions & matched_definitions).any?
-        (matched_definitions - Cucumber::Factory.step_definitions).first
+      non_factory_matches = e.matches.reject do |match|
+        Cucumber::Factory.step_definitions.include?(match.step_definition)
+      end
+      if non_factory_matches.size == 1
+        non_factory_matches.first
       else
         raise
       end
