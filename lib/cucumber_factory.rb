@@ -1,2 +1,2 @@
 require 'cucumber/factory'
-require 'cucumber/step_mother_ext'
+require 'cucumber/runtime_ext'

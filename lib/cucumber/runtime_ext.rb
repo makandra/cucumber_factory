@@ -15,7 +15,7 @@ module Cucumber
 
   end
 
-  class StepMother
+  (defined?(Runtime) ? Runtime : StepMother).class_eval do
 
     def step_match_with_factory_priority(*args)
       step_match_without_factory_priority(*args)
@@ -33,4 +33,3 @@ module Cucumber
   end
 
 end
-
