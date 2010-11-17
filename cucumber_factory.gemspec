@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cucumber_factory}
-  s.version = "1.7.1"
+  s.version = "1.7.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Henning Koch"]
-  s.date = %q{2010-11-05}
+  s.date = %q{2010-11-17}
   s.description = %q{Cucumber Factory allows you to create ActiveRecord models from your Cucumber features without writing step definitions for each model.}
   s.email = %q{github@makandra.de}
   s.extra_rdoc_files = [
@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
      "VERSION",
      "cucumber_factory.gemspec",
      "lib/cucumber/factory.rb",
-     "lib/cucumber/step_mother_ext.rb",
+     "lib/cucumber/runtime_ext.rb",
      "lib/cucumber_factory.rb",
      "spec/app_root/app/controllers/application_controller.rb",
      "spec/app_root/app/models/job_offer.rb",
@@ -53,8 +53,8 @@ Gem::Specification.new do |s|
      "spec/app_root/log/.gitignore",
      "spec/app_root/script/console",
      "spec/factory_spec.rb",
+     "spec/runtime_ext_spec.rb",
      "spec/spec_helper.rb",
-     "spec/step_mother_ext_spec.rb",
      "spec/steps_spec.rb",
      "spec/support/rcov.opts",
      "spec/support/spec.opts"
@@ -62,7 +62,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/makandra/cucumber_factory}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.3.7}
   s.summary = %q{Create records from Cucumber features without writing step definitions.}
   s.test_files = [
     "spec/app_root/app/controllers/application_controller.rb",
@@ -88,16 +88,16 @@ Gem::Specification.new do |s|
      "spec/app_root/db/migrate/004_create_actors.rb",
      "spec/app_root/lib/console_with_fixtures.rb",
      "spec/spec_helper.rb",
-     "spec/step_mother_ext_spec.rb",
      "spec/factory_spec.rb",
-     "spec/steps_spec.rb"
+     "spec/steps_spec.rb",
+     "spec/runtime_ext_spec.rb"
   ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
     else
     end
   else
