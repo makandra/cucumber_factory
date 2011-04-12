@@ -36,7 +36,7 @@ Instead of "and" you can also use "but" and commas to join sentences:
 
 You can use named Machinist blueprint such as <tt>Movie.blueprint(:comedy)</tt> like this:
 
-    Given a movie (comedy) with the title "Groundhog Day"
+    Given there is a movie (comedy) with the title "Groundhog Day"
 
 == Overriding factory steps
 
