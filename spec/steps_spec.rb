@@ -125,6 +125,7 @@ describe 'steps provided by cucumber_factory' do
 
   it "should allow to name records and set a belongs_to association to that record by refering to that name" do
     invoke_cucumber_step('"Some Prequel" is a movie with the title "Before Sunrise"')
+    invoke_cucumber_step('there is a movie with the title "Limitless"')
     invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Some Prequel"')
     movie = Movie.find_by_title!('Before Sunset')
     prequel = Movie.find_by_title!('Before Sunrise')
@@ -133,6 +134,7 @@ describe 'steps provided by cucumber_factory' do
 
   it "should allow to set a belongs_to association to a previously created record by refering to any string attribute of that record" do
     invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
+    invoke_cucumber_step('there is a movie with the title "Limitless"')
     invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Before Sunrise"')
     movie = Movie.find_by_title!('Before Sunset')
     prequel = Movie.find_by_title!('Before Sunrise')
@@ -141,6 +143,7 @@ describe 'steps provided by cucumber_factory' do
 
   it "should allow to set a belongs_to association to a previously created record by saying 'above'" do
     invoke_cucumber_step('there is a user with the name "Jane"')
+    invoke_cucumber_step('there is a movie with the title "Limitless"')
     invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
     invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above and the prequel above')
     before_sunset = Movie.find_by_title!("Before Sunset")
