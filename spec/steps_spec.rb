@@ -79,36 +79,40 @@ describe 'steps provided by cucumber_factory' do
   it "should create records with attributes" do
     movie = Movie.new
     Movie.stub(:new => movie)
-    movie.should_receive(:"attributes=").with({ :title => "Sunshine", :year => "2007" }, false)
+    movie.should_receive(:attributes=).with({ :title => "Sunshine", :year => "2007" }, false)
     invoke_cucumber_step('there is a movie with the title "Sunshine" and the year "2007"')
   end
 
   it "should allow to join attribute lists with 'and's, commas and 'but's" do
     movie = Movie.new
     Movie.stub(:new => movie)
-    movie.should_receive(:"attributes=").with({ :title => "Sunshine", :year => "2007", :box_office_result => "32000000" }, false)
+    movie.should_receive(:attributes=).with({ :title => "Sunshine", :year => "2007", :box_office_result => "32000000" }, false)
     invoke_cucumber_step('there is a movie with the title "Sunshine", the year "2007" but with the box office result "32000000"')
   end
 
   it "should apply Cucumber transforms to attribute values" do
     movie = Movie.new
     Movie.stub(:new => movie)
-    @world.should_receive(:Transform).with("value").and_return("transformed value")
-    movie.should_receive(:"attributes=").with({ :title => "transformed value" }, false)
+    @main.instance_eval do
+      Transform /^(value)$/ do |value|
+        'transformed value'
+      end
+    end
+    movie.should_receive(:attributes=).with({ :title => "transformed value" }, false)
     invoke_cucumber_step('there is a movie with the title "value"')
   end
 
   it "should create records with attributes containing spaces" do
     movie = Movie.new
     Movie.stub(:new => movie)
-    movie.should_receive(:"attributes=").with({ :box_office_result => "99999999" }, false)
+    movie.should_receive(:attributes=).with({ :box_office_result => "99999999" }, false)
     invoke_cucumber_step('there is a movie with the box office result "99999999"')
   end
 
   it "should create records with attributes containing uppercase characters" do
     user = User.new
     User.stub(:new => user)
-    user.should_receive(:"attributes=").with({ :name => "Susanne" }, false)
+    user.should_receive(:attributes=).with({ :name => "Susanne" }, false)
     invoke_cucumber_step('there is a User with the Name "Susanne"')
   end
 
@@ -119,18 +123,23 @@ describe 'steps provided by cucumber_factory' do
     payment.comment.should == 'Thanks for lending'
   end
 
-  it "should set instance variables in the world" do
-    invoke_cucumber_step('"Sunshine" is a movie with the title "Sunshine" and the year "2007"')
-    @world.instance_variable_get(:'@sunshine').title.should == "Sunshine"
+  it "should allow to name records and set a belongs_to association to that record by refering to that name" do
+    invoke_cucumber_step('"Some Prequel" is a movie with the title "Before Sunrise"')
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Some Prequel"')
+    movie = Movie.find_by_title!('Before Sunset')
+    prequel = Movie.find_by_title!('Before Sunrise')
+    movie.prequel.should == prequel
   end
 
-  it "should understand pointers to instance variables" do
-    invoke_cucumber_step('"Before Sunrise" is a movie with the title "Before Sunrise"')
-    invoke_cucumber_step('"Before Sunset" is a movie with the title "Before Sunset" and the prequel "Before Sunrise"')
-    @world.instance_variable_get(:'@before_sunset').prequel.title.should == "Before Sunrise"
+  it "should allow to set a belongs_to association to a previously created record by refering to any string attribute of that record" do
+    invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Before Sunrise"')
+    movie = Movie.find_by_title!('Before Sunset')
+    prequel = Movie.find_by_title!('Before Sunrise')
+    movie.prequel.should == prequel
   end
 
-  it "should allow to point to a previously created record through 'above'" do
+  it "should allow to set a belongs_to association to a previously created record by saying 'above'" do
     invoke_cucumber_step('there is a user with the name "Jane"')
     invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
     invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above and the prequel above')

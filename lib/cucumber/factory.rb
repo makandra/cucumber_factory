@@ -1,33 +1,58 @@
 module Cucumber
-  module Factory
+  class Factory
+
+    ATTRIBUTES_PATTERN = '( with the .+?)?( (?:which|who|that) is .+?)?'
+
+    NAMED_RECORDS_VARIABLE = :'@named_cucumber_factory_records'
+
+    CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR = {
+      :kind => :Before,
+      :block => lambda { instance_variable_set(NAMED_RECORDS_VARIABLE, {}) }
+    }
+
+    NAMED_CREATION_STEP_DESCRIPTOR = {
+      :kind => :Given,
+      :pattern => /^"([^\"]*)" is an? (.+?)( \(.+?\))?#{ATTRIBUTES_PATTERN}?$/,
+      # we cannot use vararg blocks here in Ruby 1.8, as explained by Aslak: http://www.ruby-forum.com/topic/182927
+      :block => lambda { |a1, a2, a3, a4, a5| Cucumber::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5) }
+    }
+
+    CREATION_STEP_DESCRIPTOR = {
+      :kind => :Given,
+      :pattern => /^there is an? (.+?)( \(.+?\))?#{ATTRIBUTES_PATTERN}$/,
+       # we cannot use vararg blocks here in Ruby 1.8, as explained by Aslak: http://www.ruby-forum.com/topic/182927
+      :block => lambda { |a1, a2, a3, a4| Cucumber::Factory.send(:parse_creation, self, a1, a2, a3, a4) }
+    }
+
     class << self
 
-      ATTRIBUTES_PATTERN = '( with the .+?)?( (?:which|who|that) is .+?)?'
-
-      # List of Cucumber step definitions created by #add_steps
       attr_reader :step_definitions
 
       def add_steps(main)
-        @step_definitions = []
-        steps.each do |step|
-          @step_definitions << (main.instance_eval do
-            Given(step[:pattern], &step[:action])
-          end)
-        end
+        add_step(main, CREATION_STEP_DESCRIPTOR)
+        add_step(main, NAMED_CREATION_STEP_DESCRIPTOR)
+        add_step(main, CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR)
       end
 
-      def steps
-        # we cannot use vararg blocks here in Ruby 1.8, as explained by Aslak: http://www.ruby-forum.com/topic/182927
-        [ { :pattern => /^"([^\"]*)" is an? (.+?)( \(.+?\))?#{ATTRIBUTES_PATTERN}?$/,
-            :action => lambda { |a1, a2, a3, a4, a5| Cucumber::Factory.parse_named_creation(self, a1, a2, a3, a4, a5) } },
-          { :pattern => /^there is an? (.+?)( \(.+?\))?#{ATTRIBUTES_PATTERN}$/,
-            :action => lambda { |a1, a2, a3, a4| Cucumber::Factory.parse_creation(self, a1, a2, a3, a4) } } ]
+      private
+
+      def add_step(main, descriptor)
+        @step_definitions ||= []
+        step_definition = main.instance_eval { send(descriptor[:kind], *[descriptor[:pattern]].compact, &descriptor[:block]) }
+        @step_definitions << step_definition
+      end
+
+      def get_named_record(world, name)
+        world.instance_variable_get(NAMED_RECORDS_VARIABLE)[name]
+      end
+
+      def set_named_record(world, name, record)
+        world.instance_variable_get(NAMED_RECORDS_VARIABLE)[name] = record
       end
   
       def parse_named_creation(world, name, raw_model, raw_variant, raw_attributes, raw_boolean_attributes)
         record = parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes)
-        variable = variable_name_from_prose(name)
-        world.instance_variable_set variable, record
+        set_named_record(world, name, record)
       end
     
       def parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes)
@@ -43,16 +68,16 @@ module Cucumber
         end
         if raw_boolean_attributes.try(:strip).present?
           raw_boolean_attributes.scan(/(?:which|who|that|is| )*(not )?(.+?)(?: and | but |,|$)+/).each do |fragment|
-            flag = !fragment[0] # if not ain't there, this is true
+            flag = !fragment[0] # if the word 'not' didn't match above, this expression is true
             attribute = attribute_name_from_prose(fragment[1])
             attributes[attribute] = flag
           end
         end
         variant = raw_variant.present? && /\((.*?)\)/.match(raw_variant)[1].downcase.gsub(" ", "_")
-        create_record(model_class, variant, attributes)
+        record = create_record(model_class, variant, attributes)
+        remember_record_names(world, record, attributes)
+        record
       end
-
-      private
 
       def attribute_value(world, model_class, attribute, value_type, value)
         association = model_class.respond_to?(:reflect_on_association) ? model_class.reflect_on_association(attribute) : nil
@@ -61,7 +86,7 @@ module Cucumber
             # Don't use class.last, in sqlite that is not always the last inserted element
             value = association.klass.find(:last, :order => "id") or raise "There is no last #{attribute}"
           else
-            value = world.instance_variable_get(variable_name_from_prose(value))
+            value = get_named_record(world, value)
           end
         else
           value = world.Transform(value)
@@ -77,15 +102,7 @@ module Cucumber
         # don't use \w which depends on the system locale
         prose.gsub(/[^A-Za-z0-9_\/]+/, "_").camelize.constantize
       end
-      
-      def variable_name_from_prose(prose)
-        # don't use \w which depends on the system locale
-        name = prose.downcase.gsub(/[^A-Za-z0-9_]+/, '_')
-        name = name.gsub(/^_+/, '').gsub(/_+$/, '')
-        name = "_#{name}" unless name.length >= 0 && name =~ /^[a-z]/
-        :"@#{name}"
-      end
-      
+
       def factory_girl_factory_name(name)
         name.to_s.underscore.to_sym
       end
@@ -107,6 +124,13 @@ module Cucumber
           model
         else
           model_class.new(attributes)
+        end
+      end
+
+      def remember_record_names(world, record, attributes)
+        string_values = attributes.values.select { |v| v.is_a?(String) }
+        for string_value in string_values
+          set_named_record(world, string_value, record)
         end
       end
 
