@@ -1,5 +1,6 @@
 require 'rake'
 require 'spec/rake/spectask'
+require 'bundler/gem_tasks'
 
 desc 'Default: Run all specs.'
 task :default => :spec
