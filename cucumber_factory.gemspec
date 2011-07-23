@@ -105,7 +105,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('rails', '~>2.3')
   s.add_development_dependency('rspec', '<2')
-  s.add_development_dependency('rspec-rails', '<2')
+  s.add_development_dependency('rspec-rails', '=1.3.4')
   s.add_development_dependency('sqlite3')
   s.add_dependency('cucumber')
 end

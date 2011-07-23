@@ -7,7 +7,7 @@ module Cucumber
 
     CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR = {
       :kind => :Before,
-      :block => lambda { instance_variable_set(NAMED_RECORDS_VARIABLE, {}) }
+      :block => proc { instance_variable_set(NAMED_RECORDS_VARIABLE, {}) }
     }
 
     NAMED_CREATION_STEP_DESCRIPTOR = {

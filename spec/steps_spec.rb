@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require 'spec_helper'
 
 require 'cucumber'
 require 'cucumber/rb_support/rb_language'
