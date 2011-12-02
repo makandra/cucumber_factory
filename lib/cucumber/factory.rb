@@ -109,7 +109,7 @@ module Cucumber
       
       def create_record(model_class, variant, attributes)
         fg_factory_name = factory_girl_factory_name(variant || model_class)
-        if defined?(::Factory) && factory = ::Factory.factories[fg_factory_name]
+        if defined?(::Factory) && factory = ::FactoryGirl.factories[fg_factory_name]
           ::Factory.create(fg_factory_name, attributes)
         elsif model_class.respond_to?(:make) # Machinist blueprint
           if variant.present?
