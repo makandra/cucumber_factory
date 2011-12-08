@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'cucumber'
 require 'cucumber/rb_support/rb_language'
 
-class Factory # for factory_girl compatibility spec
+class FactoryGirl # for factory_girl compatibility spec
   def self.factories
     {}
   end
@@ -37,15 +37,15 @@ describe 'steps provided by cucumber_factory' do
     invoke_cucumber_step('there is a machinist model (Variant Mark Two) with the attribute "foo"')
   end
 
-  it "should create models that have a factory_girl factory by calling #Factory.make(:model_name)" do
-    Factory.should_receive(:factories).with().and_return({ :job_offer => :job_offer_factory }) # Fake factory look up in factory_girl
-    Factory.should_receive(:create).with(:job_offer, { :title => "Awesome job" })
+  it "should create models that have a factory_girl factory by calling #FactoryGirl.create(:model_name)" do
+    FactoryGirl.should_receive(:factories).with().and_return({ :job_offer => :job_offer_factory }) # Fake factory look up in factory_girl
+    FactoryGirl.should_receive(:create).with(:job_offer, { :title => "Awesome job" })
     invoke_cucumber_step('there is a job offer with the title "Awesome job"')
   end
 
-  it "should create model variants that have a factory_girl factory by calling #Factory.make(:variant_name)" do
-    Factory.should_receive(:factories).with().and_return({ :tempting_job_offer => :tempting_job_offer_factory }) # Fake factory look up in factory_girl
-    Factory.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
+  it "should create model variants that have a factory_girl factory by calling #FactoryGirl.create(:variant_name)" do
+    FactoryGirl.should_receive(:factories).with().and_return({ :tempting_job_offer => :tempting_job_offer_factory }) # Fake factory look up in factory_girl
+    FactoryGirl.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
     invoke_cucumber_step('there is a job offer (tempting job offer) with the title "Awesomafiablyfantasmic job"')
   end
 
