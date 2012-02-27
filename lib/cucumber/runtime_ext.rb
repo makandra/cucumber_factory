@@ -1,4 +1,5 @@
 require 'cucumber/step_mother'
+require 'active_support/core_ext'
 
 module Cucumber
 
