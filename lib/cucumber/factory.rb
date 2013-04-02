@@ -43,7 +43,9 @@ module Cucumber
       end
 
       def get_named_record(world, name)
-        world.instance_variable_get(NAMED_RECORDS_VARIABLE)[name]
+        world.instance_variable_get(NAMED_RECORDS_VARIABLE)[name].tap do |record|
+          record.reload if record.respond_to?(:reload) and record.respond_to?(:new_record?) and not record.new_record?
+        end
       end
 
       def set_named_record(world, name, record)

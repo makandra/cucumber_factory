@@ -151,6 +151,12 @@ describe 'steps provided by cucumber_factory' do
     before_sunset.reviewer.name.should == "Jane"
   end
 
+  it "should reload an object assigned to a belongs_to before assigning" do
+    invoke_cucumber_step('"Jane" is a user who is deleted')
+    User.last.update_attributes(:deleted => false)
+    proc { invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer "Jane"') }.should_not raise_error
+  end
+
   it "should allow to set positive boolean attributes with 'who' after the attribute list" do
     user = User.new
     User.stub(:new => user)
