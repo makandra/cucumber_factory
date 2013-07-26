@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/makandra/cucumber_factory}
   s.summary = %q{Create records from Cucumber features without writing step definitions.}
   s.description = %q{Cucumber Factory allows you to create ActiveRecord models from your Cucumber features without writing step definitions for each model.}
+  s.license = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
