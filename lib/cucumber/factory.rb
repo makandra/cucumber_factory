@@ -106,7 +106,7 @@ module Cucumber
       end
 
       def factory_girl_factory_name(name)
-        name.to_s.underscore.to_sym
+        name.to_s.underscore.gsub('/', '_').to_sym
       end
       
       def create_record(model_class, variant, attributes)

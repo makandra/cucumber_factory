@@ -17,4 +17,13 @@ describe Cucumber::Factory do
 
   end
 
+  describe 'factory_girl_factory_name' do
+
+    it "should underscorize everything" do
+      subject.send(:factory_girl_factory_name, People::Actor).should == :people_actor
+      subject.send(:factory_girl_factory_name, JobOffer).should == :job_offer
+    end
+
+  end
+
 end
