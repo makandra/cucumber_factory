@@ -51,12 +51,12 @@ module Cucumber
       def set_named_record(world, name, record)
         world.instance_variable_get(NAMED_RECORDS_VARIABLE)[name] = record
       end
-  
+
       def parse_named_creation(world, name, raw_model, raw_variant, raw_attributes, raw_boolean_attributes)
         record = parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes)
         set_named_record(world, name, record)
       end
-    
+
       def parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes)
         model_class = model_class_from_prose(raw_model)
         attributes = {}
@@ -86,7 +86,7 @@ module Cucumber
         if association.present?
           if value_type == "above"
             # Don't use class.last, in sqlite that is not always the last inserted element
-            value = association.klass.find(:last, :order => "id") or raise "There is no last #{attribute}"
+            value = association.klass.order(:id).last or raise "There is no last #{attribute}"
           else
             value = get_named_record(world, value)
           end
@@ -108,7 +108,7 @@ module Cucumber
       def factory_girl_factory_name(name)
         name.to_s.underscore.gsub('/', '_').to_sym
       end
-      
+
       def create_record(model_class, variant, attributes)
         fg_factory_name = factory_girl_factory_name(variant || model_class)
         if defined?(::FactoryGirl) && factory = ::FactoryGirl.factories[fg_factory_name]
