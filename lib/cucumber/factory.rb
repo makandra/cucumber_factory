@@ -86,7 +86,8 @@ module Cucumber
         if association.present?
           if value_type == "above"
             # Don't use class.last, in sqlite that is not always the last inserted element
-            value = association.klass.find(:last, :order => "id") or raise "There is no last #{attribute}"
+            # value = association.klass.order(:id).last or raise "There is no last #{attribute}"
+            value = CucumberFactory::Switcher.find_last(association.klass)
           else
             value = get_named_record(world, value)
           end
@@ -108,7 +109,7 @@ module Cucumber
       def factory_girl_factory_name(name)
         name.to_s.underscore.gsub('/', '_').to_sym
       end
-      
+
       def create_record(model_class, variant, attributes)
         fg_factory_name = factory_girl_factory_name(variant || model_class)
         if defined?(::FactoryGirl) && factory = ::FactoryGirl.factories[fg_factory_name]
@@ -121,7 +122,7 @@ module Cucumber
           end
         elsif model_class.respond_to?(:create!) # Plain ActiveRecord
           model = model_class.new
-          model.send(:attributes=, attributes, false) # ignore attr_accessible
+          CucumberFactory::Switcher.assign_attributes(model, attributes)
           model.save!
           model
         else
