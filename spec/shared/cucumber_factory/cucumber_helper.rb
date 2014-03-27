@@ -1,7 +1,7 @@
 def prepare_cucumber_example
   @runtime = Cucumber::Runtime.new
   language = @runtime.load_programming_language('rb')
-  scenario = stub('scenario', :language => 'en', :accept_hook? => true)
+  scenario = double('scenario', :language => 'en', :accept_hook? => true)
   language.send(:begin_scenario, scenario)
   @world = language.current_world
   @main = Object.new

@@ -3,6 +3,7 @@ module CucumberFactory
     extend self
 
     def find_last(klass)
+      # Don't use class.last, in sqlite that is not always the last inserted element
       if Rails::VERSION::MAJOR < 4
         klass.find(:last, :order => "id") or raise "There is no last #{attribute}"
       else
