@@ -155,6 +155,12 @@ describe 'steps provided by cucumber_factory' do
     before_sunset.reviewer.name.should == "Jane"
   end
 
+  it "should raise a proper error if there is no previous record when saying 'above'" do
+    lambda do
+      invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above and the prequel above')
+    end.should raise_error(RuntimeError, "There is no last reviewer")
+  end
+
   it "should reload an object assigned to a belongs_to before assigning" do
     invoke_cucumber_step('"Jane" is a user who is deleted')
     User.last.update_attributes(:deleted => false)

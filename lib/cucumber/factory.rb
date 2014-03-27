@@ -85,7 +85,7 @@ module Cucumber
         association = model_class.respond_to?(:reflect_on_association) ? model_class.reflect_on_association(attribute) : nil
         if association.present?
           if value_type == "above"
-            value = CucumberFactory::Switcher.find_last(association.klass)
+            value = CucumberFactory::Switcher.find_last(association.klass) or raise "There is no last #{attribute}"
           else
             value = get_named_record(world, value)
           end
