@@ -3,12 +3,7 @@ require 'spec_helper'
 require_relative 'cucumber_helper'
 require 'cucumber'
 require 'cucumber/rb_support/rb_language'
-
-class FactoryGirl # for factory_girl compatibility spec
-  def self.factories
-    {}
-  end
-end
+require_relative '../support/factory_girl_mock'
 
 describe 'steps provided by cucumber_factory' do
 
@@ -39,15 +34,21 @@ describe 'steps provided by cucumber_factory' do
   end
 
   it "should create models that have a factory_girl factory by calling #FactoryGirl.create(:model_name)" do
-    FactoryGirl.should_receive(:factories).with().and_return({ :job_offer => :job_offer_factory }) # Fake factory look up in factory_girl
+    FactoryGirl.stub_factories :job_offer => JobOffer
     FactoryGirl.should_receive(:create).with(:job_offer, { :title => "Awesome job" })
     invoke_cucumber_step('there is a job offer with the title "Awesome job"')
   end
 
-  it "should create model variants that have a factory_girl factory by calling #FactoryGirl.create(:variant_name)" do
-    FactoryGirl.should_receive(:factories).with().and_return({ :tempting_job_offer => :tempting_job_offer_factory }) # Fake factory look up in factory_girl
+  it "should create model variants that have a factory_girl factory by calling #FactoryGirl.create(:variant)" do
+    FactoryGirl.stub_factories :tempting_job_offer => JobOffer
     FactoryGirl.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
     invoke_cucumber_step('there is a job offer (tempting job offer) with the title "Awesomafiablyfantasmic job"')
+  end
+
+  it "should create model variants that have a factory_girl factory by using the model name as a factory name" do
+    FactoryGirl.stub_factories :tempting_job_offer => JobOffer
+    FactoryGirl.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
+    invoke_cucumber_step('there is a tempting job offer with the title "Awesomafiablyfantasmic job"')
   end
 
   it "should instantiate plain ruby classes by calling #new" do

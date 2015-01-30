@@ -1,3 +1,5 @@
+require 'cucumber/factory/build_strategy'
+
 module Cucumber
   class Factory
 
@@ -58,7 +60,8 @@ module Cucumber
       end
     
       def parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes)
-        model_class = model_class_from_prose(raw_model)
+        build_strategy = BuildStrategy.from_prose(raw_model, raw_variant)
+        model_class = build_strategy.model_class
         attributes = {}
         if raw_attributes.try(:strip).present?
           raw_attributes.scan(/(?:the|and|with|but|,| )+(.*?) ("([^\"]*)"|above)/).each do |fragment|
@@ -75,8 +78,7 @@ module Cucumber
             attributes[attribute] = flag
           end
         end
-        variant = raw_variant.present? && /\((.*?)\)/.match(raw_variant)[1].downcase.gsub(" ", "_")
-        record = create_record(model_class, variant, attributes)
+        record = build_strategy.create_record(attributes)
         remember_record_names(world, record, attributes)
         record
       end
@@ -97,35 +99,6 @@ module Cucumber
 
       def attribute_name_from_prose(prose)
         prose.downcase.gsub(" ", "_").to_sym
-      end
-
-      def model_class_from_prose(prose)
-        # don't use \w which depends on the system locale
-        prose.gsub(/[^A-Za-z0-9_\/]+/, "_").camelize.constantize
-      end
-
-      def factory_girl_factory_name(name)
-        name.to_s.underscore.gsub('/', '_').to_sym
-      end
-
-      def create_record(model_class, variant, attributes)
-        fg_factory_name = factory_girl_factory_name(variant || model_class)
-        if defined?(::FactoryGirl) && factory = ::FactoryGirl.factories[fg_factory_name]
-          ::FactoryGirl.create(fg_factory_name, attributes)
-        elsif model_class.respond_to?(:make) # Machinist blueprint
-          if variant.present?
-            model_class.make(variant.to_sym, attributes)
-          else
-            model_class.make(attributes)
-          end
-        elsif model_class.respond_to?(:create!) # Plain ActiveRecord
-          model = model_class.new
-          CucumberFactory::Switcher.assign_attributes(model, attributes)
-          model.save!
-          model
-        else
-          model_class.new(attributes)
-        end
       end
 
       def remember_record_names(world, record, attributes)
