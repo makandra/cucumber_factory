@@ -10,13 +10,18 @@ module Cucumber
         def from_prose(model_prose, variant_prose)
           # don't use \w which depends on the system locale
           underscored_model_name = model_prose.gsub(/[^A-Za-z0-9_\/]+/, "_")
-          variant = variant_prose.present? && /\((.*?)\)/.match(variant_prose)[1].downcase.gsub(" ", "_")
+          if variant_prose.present?
+            variants = /\((.*?)\)/.match(variant_prose)[1].split(/\s*,\s*/)
+            variants = variants.collect { |variant| variant.downcase.gsub(" ", "_") }
+          else
+            variants = []
+          end
 
-          if factory_girl_strategy = factory_girl_strategy(variant || underscored_model_name)
+          if factory_girl_strategy = factory_girl_strategy(underscored_model_name, variants)
             factory_girl_strategy
           else
             model_class = underscored_model_name.camelize.constantize
-            machinist_strategy(model_class, variant) ||
+            machinist_strategy(model_class, variants) ||
               active_record_strategy(model_class) ||
               ruby_object_strategy(model_class)
           end
@@ -24,25 +29,32 @@ module Cucumber
 
         private
 
-        def factory_girl_strategy(factory_name)
+        def factory_girl_strategy(factory_name, variants)
           return unless defined?(::FactoryGirl)
-
+          variants = variants.map(&:to_sym)
           factory_name = factory_name.to_s.underscore.gsub('/', '_').to_sym
-          if factory = ::FactoryGirl.factories[factory_name]
 
-            new(factory.build_class) do |attributes|
-              ::FactoryGirl.create(factory.name, attributes)
-            end
+          factory = ::FactoryGirl.factories[factory_name]
 
+          if factory.nil? && variants.present? && factory = ::FactoryGirl.factories[variants[0]]
+            factory_name, *variants = variants
           end
+
+          if factory
+            new(factory.build_class) do |attributes|
+              ::FactoryGirl.create(factory_name, *variants, attributes)
+            end
+          end
+
         end
 
-        def machinist_strategy(model_class, variant)
+        def machinist_strategy(model_class, variants)
           if model_class.respond_to?(:make)
 
             new(model_class) do |attributes|
-              if variant.present?
-                model_class.make(variant.to_sym, attributes)
+              if variants.present?
+                variants.size == 1 or raise 'Machinist only supports a single variant per blueprint'
+                model_class.make(variants.first.to_sym, attributes)
               else
                 model_class.make(attributes)
               end

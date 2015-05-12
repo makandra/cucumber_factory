@@ -45,6 +45,12 @@ describe 'steps provided by cucumber_factory' do
     invoke_cucumber_step('there is a job offer (tempting job offer) with the title "Awesomafiablyfantasmic job"')
   end
 
+  it "should create model variants that have a factory_girl trait by calling #FactoryGirl.create(:factory, :trait1, :trait2)" do
+    FactoryGirl.stub_factories :tempting_job_offer => JobOffer
+    FactoryGirl.should_receive(:create).with(:tempting_job_offer, :risky, :lucrative, { :title => "Awesomafiablyfantasmic job" })
+    invoke_cucumber_step('there is a tempting job offer (risky, lucrative) with the title "Awesomafiablyfantasmic job"')
+  end
+
   it "should create model variants that have a factory_girl factory by using the model name as a factory name" do
     FactoryGirl.stub_factories :tempting_job_offer => JobOffer
     FactoryGirl.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })

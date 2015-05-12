@@ -53,9 +53,13 @@ Note that in the example above, "Before Sunrise" is only a name you can use to r
 
 {Machinist blueprints}[http://github.com/notahat/machinist] and {factory_girl factories}[http://github.com/thoughtbot/factory_girl] will be used when available.
 
-You can use named Machinist blueprint such as <tt>Movie.blueprint(:comedy)</tt> like this:
+You can use a {FactoryGirl child factory}[https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#inheritance] or {Machinist named blueprint}[https://github.com/notahat/machinist/tree/1.0-maintenance#named-blueprints] by putting the variant name in parentheses:
 
     Given there is a movie (comedy) with the title "Groundhog Day"
+
+You can use {FactoryGirl traits}[https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#traits] by putting the traits in parentheses, as a comma-separated list:
+
+    Given there is a movie (moody, dark) with the title "Interstellar"
 
 
 == Overriding factory steps
