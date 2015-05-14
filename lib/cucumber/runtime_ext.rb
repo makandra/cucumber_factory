@@ -1,4 +1,4 @@
-require 'cucumber/step_mother'
+require 'cucumber/runtime'
 
 module Cucumber
 
