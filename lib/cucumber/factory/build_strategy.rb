@@ -42,7 +42,12 @@ module Cucumber
 
           if factory
             new(factory.build_class) do |attributes|
-              ::FactoryGirl.create(factory_name, *variants, attributes)
+              # Cannot have additional scalar args after a varargs
+              # argument in Ruby 1.8 and 1.9
+              args = []
+              args += variants
+              args << attributes
+              ::FactoryGirl.create(factory_name, *args)
             end
           end
 
