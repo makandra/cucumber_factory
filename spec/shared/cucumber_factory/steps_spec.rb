@@ -154,6 +154,19 @@ describe 'steps provided by cucumber_factory' do
 
   it "should allow to set a belongs_to association to a previously created record by saying 'above'" do
     invoke_cucumber_step('there is a user with the name "Jane"')
+    invoke_cucumber_step('there is a user with the name "John"')
+    invoke_cucumber_step('there is a movie with the title "Limitless"')
+    invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above and the prequel above')
+    before_sunset = Movie.find_by_title!("Before Sunset")
+    before_sunset.prequel.title.should == "Before Sunrise"
+    before_sunset.reviewer.name.should == "John"
+  end
+
+  it "should give created_at precedence over id when saying 'above' so that records with UUIDs are handled correctly" do
+    invoke_cucumber_step('there is a user with the name "Jane"')
+    invoke_cucumber_step('there is a user with the name "John"')
+    User.find_by_name("John").update_attributes!(:created_at => 1.day.ago)
     invoke_cucumber_step('there is a movie with the title "Limitless"')
     invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
     invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above and the prequel above')

@@ -9,6 +9,7 @@ class CreateUsers < ActiveRecord::Migration
       t.boolean :subscribed
       t.boolean :scared
       t.boolean :scared_by_spiders
+      t.datetime :created_at
     end
   end
 

@@ -4,10 +4,12 @@ module CucumberFactory
 
     def find_last(klass)
       # Don't use class.last, in sqlite that is not always the last inserted element
+      # If created_at is available prefer it over id as column for ordering so that we can handle UUIDs
+      order_column = klass.column_names.include?('created_at') ? 'created_at, id' : 'id'
       if Rails::VERSION::MAJOR < 4
-        klass.find(:last, :order => "id")
+        klass.find(:last, :order => order_column)
       else
-        klass.order(:id).last
+        klass.order(order_column).last
       end
     end
 
