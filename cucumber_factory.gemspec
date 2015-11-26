@@ -17,13 +17,9 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency('rails', '~>2.3')
-  s.add_development_dependency('rspec', '<2')
-  s.add_development_dependency('rspec-rails', '=1.3.4')
-  s.add_development_dependency('sqlite3')
-
   s.add_dependency('cucumber')
   s.add_dependency('activesupport')
+  s.add_dependency('cucumber_priority')
 
 end
 

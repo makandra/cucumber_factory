@@ -13,7 +13,7 @@ describe 'steps provided by cucumber_factory' do
 
   it "should create ActiveRecord models by calling #new and #save!" do
     movie = Movie.new
-    Movie.should_receive(:new).with().and_return(movie)
+    Movie.should_receive(:new).with(no_args).and_return(movie)
     movie.should_receive(:save!)
     invoke_cucumber_step("there is a movie")
   end
@@ -192,7 +192,7 @@ describe 'steps provided by cucumber_factory' do
     User.stub(:new => user)
     invoke_cucumber_step('there is a user with the name "Jane" who is deleted')
     user.name.should == "Jane"
-    user.deleted.should be_true
+    user.deleted.should == true
   end
 
   it "should allow to set positive boolean attributes with 'which' after the attribute list" do
@@ -200,7 +200,7 @@ describe 'steps provided by cucumber_factory' do
     User.stub(:new => user)
     invoke_cucumber_step('there is a user with the name "Jane" which is deleted')
     user.name.should == "Jane"
-    user.deleted.should be_true
+    user.deleted.should == true
   end
 
   it "should allow to set positive boolean attributes with 'that' after the attribute list" do
@@ -208,50 +208,50 @@ describe 'steps provided by cucumber_factory' do
     User.stub(:new => user)
     invoke_cucumber_step('there is a user with the name "Jane" that is deleted')
     user.name.should == "Jane"
-    user.deleted.should be_true
+    user.deleted.should == true
   end
 
   it "should allow to set boolean attributes without regular attributes preceding them" do
     user = User.new
     User.stub(:new => user)
     invoke_cucumber_step('there is a user who is deleted')
-    user.deleted.should be_true
+    user.deleted.should == true
   end
 
   it "should allow to set negative boolean attribute" do
     user = User.new
     User.stub(:new => user)
     invoke_cucumber_step('there is a user who is not deleted')
-    user.deleted.should be_false
+    user.deleted.should == false
   end
 
   it "should allow to set multiple boolean attributes" do
     user = User.new
     User.stub(:new => user)
     invoke_cucumber_step('there is a user who is locked and not deleted and subscribed')
-    user.locked.should be_true
-    user.deleted.should be_false
-    user.subscribed.should be_true
+    user.locked.should == true
+    user.deleted.should == false
+    user.subscribed.should == true
   end
 
   it "should allow to set boolean attributes that are named from multiple words" do
     user = User.new
     User.stub(:new => user)
     invoke_cucumber_step('there is a user who is locked and not scared and scared by spiders and deleted')
-    user.locked.should be_true
-    user.scared.should be_false
-    user.scared_by_spiders.should be_true
-    user.deleted.should be_true
+    user.locked.should == true
+    user.scared.should == false
+    user.scared_by_spiders.should == true
+    user.deleted.should == true
   end
 
   it "should allow to join boolean attribute lists with 'and's, commas and 'but's" do
     user = User.new
     User.stub(:new => user)
     invoke_cucumber_step('there is a user who is locked, scared, but scared by spiders and deleted')
-    user.locked.should be_true
-    user.scared.should be_true
-    user.scared_by_spiders.should be_true
-    user.deleted.should be_true
+    user.locked.should == true
+    user.scared.should == true
+    user.scared_by_spiders.should == true
+    user.deleted.should == true
   end
 
 end

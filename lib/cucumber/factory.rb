@@ -28,8 +28,6 @@ module Cucumber
 
     class << self
 
-      attr_reader :step_definitions
-
       def add_steps(main)
         add_step(main, CREATION_STEP_DESCRIPTOR)
         add_step(main, NAMED_CREATION_STEP_DESCRIPTOR)
@@ -39,9 +37,12 @@ module Cucumber
       private
 
       def add_step(main, descriptor)
-        @step_definitions ||= []
-        step_definition = main.instance_eval { send(descriptor[:kind], *[descriptor[:pattern]].compact, &descriptor[:block]) }
-        @step_definitions << step_definition
+        main.instance_eval {
+          kind = descriptor[:kind]
+          object = send(kind, *[descriptor[:pattern]].compact, &descriptor[:block])
+          object.overridable if kind != :Before
+          object
+        }
       end
 
       def get_named_record(world, name)
