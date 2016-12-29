@@ -9,7 +9,7 @@ module Cucumber
 
     CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR = {
       :kind => :Before,
-      :block => proc { instance_variable_set(NAMED_RECORDS_VARIABLE, {}) }
+      :block => proc { Cucumber::Factory.send(:forget_named_records, self) }
     }
 
     NAMED_CREATION_STEP_DESCRIPTOR = {
@@ -45,14 +45,23 @@ module Cucumber
         }
       end
 
+      def reset_named_records(world)
+        world.instance_variable_set(NAMED_RECORDS_VARIABLE, {})
+      end
+
+      def named_records(world)
+        hash = world.instance_variable_get(NAMED_RECORDS_VARIABLE)
+        hash || reset_named_records(world)
+      end
+
       def get_named_record(world, name)
-        world.instance_variable_get(NAMED_RECORDS_VARIABLE)[name].tap do |record|
+        named_records(world)[name].tap do |record|
           record.reload if record.respond_to?(:reload) and record.respond_to?(:new_record?) and not record.new_record?
         end
       end
 
       def set_named_record(world, name, record)
-        world.instance_variable_get(NAMED_RECORDS_VARIABLE)[name] = record
+        named_records(world)[name] = record
       end
   
       def parse_named_creation(world, name, raw_model, raw_variant, raw_attributes, raw_boolean_attributes)
