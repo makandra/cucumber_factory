@@ -1,0 +1,5 @@
+mysql:
+  database: cucumber_factory_test
+  host: localhost
+  username: root
+  password: junior

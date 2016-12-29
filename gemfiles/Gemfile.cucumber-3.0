@@ -1,0 +1,16 @@
+source 'https://rubygems.org'
+
+# Runtime dependencies
+gem 'cucumber', '~> 3.0.0.pre.1'
+gem 'activesupport', '~> 5.0.0'
+gem 'activerecord', '~> 5.0.0'
+gem 'mysql2'
+
+# Development dependencies
+gem 'rspec', '~> 3.0'
+gem 'rake'
+gem 'database_cleaner'
+gem 'gemika'
+
+# Gem under test
+gem 'cucumber_factory'

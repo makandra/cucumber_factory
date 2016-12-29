@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('cucumber')
   s.add_dependency('activesupport')
+  s.add_dependency('activerecord')
   s.add_dependency('cucumber_priority')
 
 end
