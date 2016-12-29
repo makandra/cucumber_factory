@@ -16,7 +16,7 @@ module CucumberFactory
     def assign_attributes(model, attributes)
       if active_record_version < 3
         model.send(:attributes=, attributes, false) # ignore attr_accessible
-      elsif Rails::VERSION::MAJOR < 4
+      elsif active_record_version < 4
         model.send(:assign_attributes, attributes, :without_protection => true)
       else
         model.send(:assign_attributes, attributes)
