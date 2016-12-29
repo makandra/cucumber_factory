@@ -18,7 +18,11 @@ def load_ruby_language
 end
 
 def invoke_cucumber_step(step)
-  multiline_argument = Cucumber::MultilineArgument::None.new
+  multiline_argument = begin
+    Cucumber::MultilineArgument::None.new # Cucumber 2+
+  rescue NameError
+    nil # Cucumber 1
+  end
   first_step_match(step).invoke(multiline_argument) # nil means no multiline args
 end
 

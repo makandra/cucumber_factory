@@ -16,7 +16,7 @@ To create a new record with default attributes:
 Given there is a movie
 ```
 
-To create the record, cucumber_factory will call [`Movie.make`](http://github.com/notahat/machinist), [`Factory.create(:movie)``](http://github.com/thoughtbot/factory_girl), [`Movie.create!`](http://apidock.com/rails/ActiveRecord/Persistence/ClassMethods/create%21) or `Movie.new`, depending on what's available.
+To create the record, cucumber_factory will call [`Movie.make`](http://github.com/notahat/machinist), [`Factory.create(:movie)`](http://github.com/thoughtbot/factory_girl), [`Movie.create!`](http://apidock.com/rails/ActiveRecord/Persistence/ClassMethods/create%21) or `Movie.new`, depending on what's available.
 
 To create a new record with attributes set, you can say:
 
