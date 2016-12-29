@@ -1,4 +1,4 @@
-cucumber_factory
+cucumber_factory [![Build Status](https://travis-ci.org/makandra/cucumber_factory.svg?branch=master)](https://travis-ci.org/makandra/cucumber_factory)
 ================
 
 Create ActiveRecord objects without step definitions
