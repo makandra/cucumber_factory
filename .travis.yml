@@ -23,7 +23,7 @@ matrix:
 
 install:
   # Old Travis CI bundler explodes when lockfile version doesn't match recently bumped version
-  - gem uninstall bundler -x -I'
+  - gem uninstall bundler -x -I
   - gem install bundler --version='=1.12.5'
   # This is the default Travis CI install step
   - bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-vendor/bundle}
