@@ -108,7 +108,7 @@ Custom steps will always be preferred over factory steps. Also Cucumber will not
 Supported Cucumber versions
 ----------------------------
 
-cucumber_priority is tested against Cucumber 1.3, 2.4 and 3.0.
+cucumber_factory is tested against Cucumber 1.3, 2.4 and 3.0.
 
 
 Installation
@@ -116,7 +116,7 @@ Installation
 
 In your `Gemfile` say:
 
-    gem 'cucumber_priority'
+    gem 'cucumber_factory'
 
 Now create a file `features/step_definitions/factory_steps.rb`, which just says
 
