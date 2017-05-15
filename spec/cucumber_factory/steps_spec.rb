@@ -250,4 +250,11 @@ describe 'steps provided by cucumber_factory' do
     user.deleted.should == true
   end
 
+  it "should allow attribute names starting with 'the'" do
+    movie = Movie.new
+    Movie.stub(:new => movie)
+    invoke_cucumber_step('there is a movie with the theme "Love"')
+    movie.theme.should == "Love"
+  end
+
 end
