@@ -250,4 +250,24 @@ describe 'steps provided by cucumber_factory' do
     user.deleted.should == true
   end
 
+  it "should allow attribute names starting with 'the'" do
+    PlainRubyClass.should_receive(:new).with({:theme => 'Sci-fi'})
+    invoke_cucumber_step('there is a plain ruby class with the theme "Sci-fi"')
+  end
+
+  it "should allow attribute names starting with 'and'" do
+    PlainRubyClass.should_receive(:new).with({:android => 'Paranoid'})
+    invoke_cucumber_step('there is a plain ruby class with the android "Paranoid"')
+  end
+
+  it "should allow attribute names starting with 'with'" do
+    PlainRubyClass.should_receive(:new).with({:withdrawal => 'bank_account'})
+    invoke_cucumber_step('there is a plain ruby class with the withdrawal "bank_account"')
+  end
+
+  it "should allow attribute names starting with 'but'" do
+    PlainRubyClass.should_receive(:new).with({:butt => 'pear-shaped'})
+    invoke_cucumber_step('there is a plain ruby class with the butt "pear-shaped"')
+  end
+
 end
