@@ -9,7 +9,7 @@ module Cucumber
 
     CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR = {
       :kind => :Before,
-      :block => proc { Cucumber::Factory.send(:forget_named_records, self) }
+      :block => proc { Cucumber::Factory.send(:reset_named_records, self) }
     }
 
     NAMED_CREATION_STEP_DESCRIPTOR = {

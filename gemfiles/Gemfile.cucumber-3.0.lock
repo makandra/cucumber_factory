@@ -28,7 +28,7 @@ GEM
       backports (~> 3.6)
       gherkin (~> 4.0)
     cucumber-wire (0.0.1)
-    cucumber_factory (1.11.5)
+    cucumber_factory (1.11.6)
       activesupport
       cucumber
       cucumber_priority
