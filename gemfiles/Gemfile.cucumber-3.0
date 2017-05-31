@@ -13,4 +13,4 @@ gem 'database_cleaner'
 gem 'gemika'
 
 # Gem under test
-gem 'cucumber_factory'
+gem 'cucumber_factory', :path => '..'
