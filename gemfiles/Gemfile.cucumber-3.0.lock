@@ -1,3 +1,12 @@
+PATH
+  remote: ..
+  specs:
+    cucumber_factory (1.11.7)
+      activerecord
+      activesupport
+      cucumber
+      cucumber_priority (>= 0.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -28,10 +37,6 @@ GEM
       backports (~> 3.6)
       gherkin (~> 4.0)
     cucumber-wire (0.0.1)
-    cucumber_factory (1.11.6)
-      activesupport
-      cucumber
-      cucumber_priority
     cucumber_priority (0.2.0)
       cucumber
     database_cleaner (1.5.3)
@@ -68,7 +73,7 @@ DEPENDENCIES
   activerecord (~> 5.0.0)
   activesupport (~> 5.0.0)
   cucumber (~> 3.0.0.pre.1)
-  cucumber_factory
+  cucumber_factory!
   database_cleaner
   gemika
   mysql2
