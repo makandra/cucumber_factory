@@ -159,6 +159,18 @@ describe 'steps provided by cucumber_factory' do
     before_sunset.reviewer.name.should == "John"
   end
 
+  it "should fallback to using transforms when no named record is found" do
+    user = User.create!(:name => 'Me')
+    @main.instance_eval do
+      Transform(/^(me)$/) do |value|
+        user
+      end
+    end
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer "me"')
+    before_sunset = Movie.find_by_title!("Before Sunset")
+    before_sunset.reviewer.should == user
+  end
+
   it "should give created_at precedence over id when saying 'above' so that records with UUIDs are handled correctly" do
     invoke_cucumber_step('there is a user with the name "Jane"')
     invoke_cucumber_step('there is a user with the name "John"')

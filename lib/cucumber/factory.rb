@@ -99,7 +99,7 @@ module Cucumber
           if value_type == "above"
             value = CucumberFactory::Switcher.find_last(association.klass) or raise "There is no last #{attribute}"
           else
-            value = get_named_record(world, value)
+            value = get_named_record(world, value) || world.Transform(value)
           end
         else
           value = world.Transform(value)
