@@ -29,27 +29,27 @@ describe 'steps provided by cucumber_factory' do
     invoke_cucumber_step('there is a machinist model (Variant Mark Two) with the attribute "foo"')
   end
 
-  it "should create models that have a factory_girl factory by calling #FactoryGirl.create(:model_name)" do
-    FactoryGirl.stub_factories :job_offer => JobOffer
-    FactoryGirl.should_receive(:create).with(:job_offer, { :title => "Awesome job" })
+  it "should create models that have a factory_bot factory by calling #FactoryBot.create(:model_name)" do
+    FactoryBot.stub_factories :job_offer => JobOffer
+    FactoryBot.should_receive(:create).with(:job_offer, { :title => "Awesome job" })
     invoke_cucumber_step('there is a job offer with the title "Awesome job"')
   end
 
-  it "should create model variants that have a factory_girl factory by calling #FactoryGirl.create(:variant)" do
-    FactoryGirl.stub_factories :tempting_job_offer => JobOffer
-    FactoryGirl.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
+  it "should create model variants that have a factory_bot factory by calling #FactoryBot.create(:variant)" do
+    FactoryBot.stub_factories :tempting_job_offer => JobOffer
+    FactoryBot.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
     invoke_cucumber_step('there is a job offer (tempting job offer) with the title "Awesomafiablyfantasmic job"')
   end
 
-  it "should create model variants that have a factory_girl trait by calling #FactoryGirl.create(:factory, :trait1, :trait2)" do
-    FactoryGirl.stub_factories :tempting_job_offer => JobOffer
-    FactoryGirl.should_receive(:create).with(:tempting_job_offer, :risky, :lucrative, { :title => "Awesomafiablyfantasmic job" })
+  it "should create model variants that have a factory_bot trait by calling #FactoryBot.create(:factory, :trait1, :trait2)" do
+    FactoryBot.stub_factories :tempting_job_offer => JobOffer
+    FactoryBot.should_receive(:create).with(:tempting_job_offer, :risky, :lucrative, { :title => "Awesomafiablyfantasmic job" })
     invoke_cucumber_step('there is a tempting job offer (risky, lucrative) with the title "Awesomafiablyfantasmic job"')
   end
 
-  it "should create model variants that have a factory_girl factory by using the model name as a factory name" do
-    FactoryGirl.stub_factories :tempting_job_offer => JobOffer
-    FactoryGirl.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
+  it "should create model variants that have a factory_bot factory by using the model name as a factory name" do
+    FactoryBot.stub_factories :tempting_job_offer => JobOffer
+    FactoryBot.should_receive(:create).with(:tempting_job_offer, { :title => "Awesomafiablyfantasmic job" })
     invoke_cucumber_step('there is a tempting job offer with the title "Awesomafiablyfantasmic job"')
   end
 

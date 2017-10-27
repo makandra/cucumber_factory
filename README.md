@@ -16,7 +16,7 @@ To create a new record with default attributes:
 Given there is a movie
 ```
 
-To create the record, cucumber_factory will call [`Movie.make`](http://github.com/notahat/machinist), [`Factory.create(:movie)`](http://github.com/thoughtbot/factory_girl), [`Movie.create!`](http://apidock.com/rails/ActiveRecord/Persistence/ClassMethods/create%21) or `Movie.new`, depending on what's available.
+To create the record, cucumber_factory will call [`Movie.make`](http://github.com/notahat/machinist), [`Factory.create(:movie)`](http://github.com/thoughtbot/factory_bot), [`Movie.create!`](http://apidock.com/rails/ActiveRecord/Persistence/ClassMethods/create%21) or `Movie.new`, depending on what's available.
 
 To create a new record with attributes set, you can say:
 
@@ -74,15 +74,15 @@ Note that in the example above, "Before Sunrise" is only a name you can use to r
 Support for popular factory gems
 --------------------------------
 
-[Machinist blueprints](http://github.com/notahat/machinist) and [factory_girl factories](http://github.com/thoughtbot/factory_girl) will be used when available.
+[Machinist blueprints](http://github.com/notahat/machinist) and [factory_bot factories](http://github.com/thoughtbot/factory_bot) will be used when available.
 
-You can use a [FactoryGirl child factory](https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#inheritance) or [Machinist named blueprint](https://github.com/notahat/machinist/tree/1.0-maintenance#named-blueprints) by putting the variant name in parentheses:
+You can use a [FactoryBot child factory](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#inheritance) or [Machinist named blueprint](https://github.com/notahat/machinist/tree/1.0-maintenance#named-blueprints) by putting the variant name in parentheses:
 
 ```cucumber
 Given there is a movie (comedy) with the title "Groundhog Day"
 ```
 
-You can use [FactoryGirl traits](https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#traits) by putting the traits in parentheses, as a comma-separated list:
+You can use [FactoryBot traits](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#traits) by putting the traits in parentheses, as a comma-separated list:
 
 ```cucumber
 Given there is a movie (moody, dark) with the title "Interstellar"
