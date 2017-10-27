@@ -1,4 +1,4 @@
-class FactoryGirl # for factory_girl compatibility spec
+class FactoryBot # for factory_bot compatibility spec
 
   def self.factories
     {}
@@ -11,7 +11,7 @@ class FactoryGirl # for factory_girl compatibility spec
     hash.each do |name, build_class|
       factories[name] = Factory.new(name, build_class)
     end
-    FactoryGirl.stub :factories => factories
+    FactoryBot.stub :factories => factories
   end
 end
 

@@ -8,10 +8,10 @@ describe Cucumber::Factory::BuildStrategy do
 
   describe '.from_prose' do
 
-    context 'when describing a factory girl factory' do
+    context 'when describing a factory_bot factory' do
 
       it 'returns a strategy corresponding to the factories model' do
-        FactoryGirl.stub_factories :job_offer => JobOffer
+        FactoryBot.stub_factories :job_offer => JobOffer
         strategy = subject.from_prose('job offer', nil)
 
         strategy.should be_a(described_class)
@@ -19,7 +19,7 @@ describe Cucumber::Factory::BuildStrategy do
       end
 
       it 'uses the variant for the factory name if present' do
-        FactoryGirl.stub_factories :job_offer => JobOffer
+        FactoryBot.stub_factories :job_offer => JobOffer
         strategy = subject.from_prose('foo', '(job offer)')
 
         strategy.should be_a(described_class)
@@ -28,7 +28,7 @@ describe Cucumber::Factory::BuildStrategy do
 
     end
 
-    context 'when describing a non factory girl model' do
+    context 'when describing a non factory_bot model' do
 
       it "should return a strategy for the class matching a natural language expression" do
         subject.from_prose("movie", nil).model_class.should == Movie

@@ -1,7 +1,7 @@
 module Cucumber
   class Factory
 
-    # wraps machinist / factory_girl / ruby object logic
+    # wraps machinist / factory_bot / ruby object logic
 
     class BuildStrategy
 
@@ -17,8 +17,8 @@ module Cucumber
             variants = []
           end
 
-          if factory_girl_strategy = factory_girl_strategy(underscored_model_name, variants)
-            factory_girl_strategy
+          if factory_bot_strategy = factory_bot_strategy(underscored_model_name, variants)
+            factory_bot_strategy
           else
             model_class = underscored_model_name.camelize.constantize
             machinist_strategy(model_class, variants) ||
@@ -29,14 +29,17 @@ module Cucumber
 
         private
 
-        def factory_girl_strategy(factory_name, variants)
-          return unless defined?(::FactoryGirl)
+        def factory_bot_strategy(factory_name, variants)
+          factory_class   = ::FactoryBot  if defined?(FactoryBot)
+          factory_class ||= ::FactoryGirl if defined?(FactoryGirl)
+          return unless factory_class
+
           variants = variants.map(&:to_sym)
           factory_name = factory_name.to_s.underscore.gsub('/', '_').to_sym
 
-          factory = ::FactoryGirl.factories[factory_name]
+          factory = factory_class.factories[factory_name]
 
-          if factory.nil? && variants.present? && factory = ::FactoryGirl.factories[variants[0]]
+          if factory.nil? && variants.present? && factory = factory_class.factories[variants[0]]
             factory_name, *variants = variants
           end
 
@@ -47,7 +50,7 @@ module Cucumber
               args = []
               args += variants
               args << attributes
-              ::FactoryGirl.create(factory_name, *args)
+              factory_class.create(factory_name, *args)
             end
           end
 
