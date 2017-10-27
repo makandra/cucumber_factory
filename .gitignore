@@ -5,3 +5,4 @@ pkg
 .idea
 .rvmrc
 log/*.log
+spec/support/database.yml
