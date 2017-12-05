@@ -5,6 +5,7 @@ Gemika::Database.new.rewrite_schema! do
     t.integer :year
     t.integer :prequel_id
     t.integer :reviewer_id
+    t.string :uuid_reviewer_id
     t.integer :box_office_result
   end
 
@@ -16,6 +17,13 @@ Gemika::Database.new.rewrite_schema! do
     t.boolean :subscribed
     t.boolean :scared
     t.boolean :scared_by_spiders
+    t.datetime :created_at
+  end
+
+  create_table :uuid_users, :id => false do |t|
+    t.string :id
+    t.string :email
+    t.string :name
     t.datetime :created_at
   end
 

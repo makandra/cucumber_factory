@@ -171,16 +171,22 @@ describe 'steps provided by cucumber_factory' do
     before_sunset.reviewer.should == user
   end
 
-  it "should give created_at precedence over id when saying 'above' so that records with UUIDs are handled correctly" do
+  it "should give created_at precedence over id when saying 'above' if the primary key is not numeric" do
+    invoke_cucumber_step('there is a uuid user with the name "Jane" and the id "jane"')
+    invoke_cucumber_step('there is a uuid user with the name "John" and the id "john"')
+    UuidUser.find_by_name("John").update_attributes!(:created_at => 1.day.ago)
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the uuid reviewer above')
+    before_sunset = Movie.find_by_title!("Before Sunset")
+    before_sunset.uuid_reviewer.name.should == "Jane"
+  end
+
+  it "should ignore created_at if the primary key is numeric" do
     invoke_cucumber_step('there is a user with the name "Jane"')
     invoke_cucumber_step('there is a user with the name "John"')
     User.find_by_name("John").update_attributes!(:created_at => 1.day.ago)
-    invoke_cucumber_step('there is a movie with the title "Limitless"')
-    invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
-    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above and the prequel above')
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above')
     before_sunset = Movie.find_by_title!("Before Sunset")
-    before_sunset.prequel.title.should == "Before Sunrise"
-    before_sunset.reviewer.name.should == "Jane"
+    before_sunset.reviewer.name.should == "John"
   end
 
   it "should raise a proper error if there is no previous record when saying 'above'" do
