@@ -99,12 +99,24 @@ module Cucumber
           if value_type == "above"
             value = CucumberFactory::Switcher.find_last(association.klass) or raise "There is no last #{attribute}"
           else
-            value = get_named_record(world, value) || world.Transform(value)
+            value = get_named_record(world, value) || transform_value(world, value)
           end
         else
-          value = world.Transform(value)
+          value = transform_value(world, value)
         end
         value
+      end
+
+      def transform_value(world, value)
+        # Transforms were a feature available in Cucumber 1 and 2.
+        # They have been kind-of replaced by ParameterTypes, which don't work with generic steps
+        # like CucumberFactory's.
+        # https://app.cucumber.pro/projects/cucumber-ruby/documents/branch/master/features/docs/writing_support_code/parameter_types.feature
+        if world.respond_to?(:Transform)
+          world.Transform(value)
+        else
+          value
+        end
       end
 
       def attribute_name_from_prose(prose)

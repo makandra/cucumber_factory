@@ -1,8 +1,14 @@
 # Runtime dependencies
 require 'active_support/all'
 require 'active_record'
+
 require 'cucumber'
-require 'cucumber/rb_support/rb_language'
+if Cucumber::VERSION >= '3'
+  require 'cucumber/glue/registry_and_more'
+else
+  require 'cucumber/rb_support/rb_language'
+end
+
 require 'cucumber_priority'
 
 # Gem

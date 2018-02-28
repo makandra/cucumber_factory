@@ -108,7 +108,7 @@ Custom steps will always be preferred over factory steps. Also Cucumber will not
 Supported Cucumber versions
 ----------------------------
 
-cucumber_factory is tested against Cucumber 1.3, 2.4 and 3.0.
+cucumber_factory is tested against Cucumber 1.3, 2.4, 3.0 and 3.1.
 
 
 Installation
@@ -130,7 +130,7 @@ Development
 
 There are tests in `spec`. We only accept PRs with tests. To run tests:
 
-- Install Ruby 2.3.3
+- Install Ruby 2.5.0
 - Create a local MySQL database `cucumber_factory_test`
 - Copy `spec/support/database.sample.yml` to `spec/support/database.yml` and enter your local credentials for the test databases
 - Install development dependencies using `bundle install`
