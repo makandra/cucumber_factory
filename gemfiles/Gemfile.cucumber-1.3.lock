@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    cucumber_factory (1.11.9)
+    cucumber_factory (1.12.0)
       activerecord
       activesupport
       cucumber
@@ -20,7 +20,7 @@ GEM
       gherkin (~> 2.12)
       multi_json (>= 1.7.5, < 2.0)
       multi_test (>= 0.1.2)
-    cucumber_priority (0.3.0)
+    cucumber_priority (0.3.1)
       cucumber
     database_cleaner (1.0.1)
     diff-lcs (1.2.5)

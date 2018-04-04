@@ -39,6 +39,21 @@ Given there is a movie which is awesome, popular and successful but not science 
 And there is a director with the income "500000" but with the account balance "-30000"
 ```
 
+If you have many attribute assignments you can use doc string or data table:
+
+```cucumber
+Given there is a movie with these attributes:
+  """
+  name: Sunshine
+  comedy: false
+  """
+```
+
+```cucumber
+Given there is a movie with these attributes:
+  | name   | Sunshine |
+  | comedy | false    |
+```
 
 Setting associations
 --------------------
@@ -70,6 +85,22 @@ And there is a movie with the prequel "Before Sunrise"
 
 Note that in the example above, "Before Sunrise" is only a name you can use to refer to the record. The name is not actually used for the movie title, or any other attribute value.
 
+It is not possible to define associations in doc string or data table, but you can combine them in one
+step:
+
+```cucumber
+Given there is a movie with the prequel above and these attributes:
+  """
+  name: Sunshine
+  comedy: false
+  """
+```
+
+```cucumber
+Given there is a movie with the prequel above and these attributes:
+  | name   | Sunshine |
+  | comedy | false    |
+```
 
 Support for popular factory gems
 --------------------------------
@@ -134,12 +165,13 @@ There are tests in `spec`. We only accept PRs with tests. To run tests:
 - Create a local MySQL database `cucumber_factory_test`
 - Copy `spec/support/database.sample.yml` to `spec/support/database.yml` and enter your local credentials for the test databases
 - Install development dependencies using `bundle install`
-- Run tests using `bundle exec rspec`
+- Run tests with the default symlinked Gemfile using `bundle exec rspec` or explicit with `BUNDLE_GEMFILE=gemfiles/Gemfile.cucumber-x.x bundle exec rspec spec`
 
 We recommend to test large changes against multiple versions of Ruby and multiple dependency sets. Supported combinations are configured in `.travis.yml`. We provide some rake tasks to help with this:
 
-- Install development dependencies using `bundle matrix:install`
-- Run tests using `bundle matrix:spec`
+For each ruby version do (you need to change it manually):
+- Install development dependencies using `rake matrix:install`
+- Run tests using `rake matrix:spec`
 
 Note that we have configured Travis CI to automatically run tests in all supported Ruby versions and dependency sets after each push. We will only merge pull requests after a green Travis build.
 
