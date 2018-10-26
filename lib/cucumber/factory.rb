@@ -151,8 +151,11 @@ module Cucumber
           elsif matches_fully?(value, VALUE_STRING)
             value = unquote(value)
             value = get_named_record(world, value) || transform_value(world, value)
+          elsif matches_fully?(value, VALUE_INTEGER)
+            value = value.to_s
+            value = get_named_record(world, value) || transform_value(world, value)
           else
-            raise Error, "Cannot set association #{model_class}##{attribute} to #{value}. To identify a previously created record, use `above` or a quoted string."
+            raise Error, "Cannot set association #{model_class}##{attribute} to #{value}."
           end
         else
           value = resolve_scalar_value(world, model_class, attribute, value)
@@ -203,9 +206,9 @@ module Cucumber
       end
 
       def remember_record_names(world, record, attributes)
-        string_values = attributes.values.select { |v| v.is_a?(String) }
-        for string_value in string_values
-          set_named_record(world, string_value, record)
+        rememberable_values = attributes.values.select { |v| v.is_a?(String) || v.is_a?(Fixnum) }
+        for value in rememberable_values
+          set_named_record(world, value.to_s, record)
         end
       end
 

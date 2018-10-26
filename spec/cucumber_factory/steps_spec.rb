@@ -133,6 +133,12 @@ describe 'steps provided by cucumber_factory' do
     payment.comment.should == 'Thanks for lending'
   end
 
+  it "should allow to set an explicit primary key" do
+    invoke_cucumber_step('there is a payment with the ID 2')
+    payment = Payment.last
+    payment.id.should == 2
+  end
+
   it "should allow to name records and set a belongs_to association to that record by refering to that name" do
     invoke_cucumber_step('"Some Prequel" is a movie with the title "Before Sunrise"')
     invoke_cucumber_step('there is a movie with the title "Limitless"')
@@ -148,6 +154,14 @@ describe 'steps provided by cucumber_factory' do
     invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Before Sunrise"')
     movie = Movie.find_by_title!('Before Sunset')
     prequel = Movie.find_by_title!('Before Sunrise')
+    movie.prequel.should == prequel
+  end
+
+  it "should allow to set a belongs_to association to a previously created record by refering to their explicitely set primary keys" do
+    invoke_cucumber_step('there is a movie with the ID 123')
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel 123')
+    movie = Movie.find_by_title!('Before Sunset')
+    prequel = Movie.find(123)
     movie.prequel.should == prequel
   end
 
