@@ -289,6 +289,26 @@ describe 'steps provided by cucumber_factory' do
     obj.attributes[:total].to_s.should == "45.6"
   end
 
+  it "should allow set an array of strings with square brackets" do
+    invoke_cucumber_step('there is a plain Ruby class with the tags ["foo", "bar"] and the list ["bam", "baz"]')
+    obj = PlainRubyClass.last
+    obj.attributes[:tags].should == ['foo', 'bar']
+    obj.attributes[:list].should == ['bam', 'baz']
+  end
+
+  it "should allow set an array of numbers with square brackets" do
+    invoke_cucumber_step('there is a plain Ruby class with the integers [1, 2] and the decimals [3.4, 4.5]')
+    obj = PlainRubyClass.last
+    obj.attributes[:integers].should == [1, 2]
+    obj.attributes[:decimals].should == [BigDecimal('3.4'), BigDecimal('4.5')]
+  end
+
+  it 'should allow to set an empty array' do
+    invoke_cucumber_step('there is a plain Ruby class with the tags []')
+    obj = PlainRubyClass.last
+    obj.attributes[:tags].should == []
+  end
+
   it "should allow attribute names starting with 'the'" do
     PlainRubyClass.should_receive(:new).with({:theme => 'Sci-fi'})
     invoke_cucumber_step('there is a plain ruby class with the theme "Sci-fi"')

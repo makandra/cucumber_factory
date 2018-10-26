@@ -12,6 +12,14 @@ module Cucumber
 
     NAMED_RECORDS_VARIABLE = :'@named_cucumber_factory_records'
 
+    VALUE_INTEGER = /\d+/
+    VALUE_DECIMAL = /[\d\.]+/
+    VALUE_STRING = /"[^"]*"/
+    VALUE_ARRAY = /\[[^\]]*\]/
+    VALUE_LAST_RECORD = /\babove\b/
+
+    VALUE_SCALAR = /#{VALUE_STRING}|#{VALUE_DECIMAL}|#{VALUE_INTEGER}/
+
     CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR = {
       :kind => :Before,
       :block => proc { Cucumber::Factory.send(:reset_named_records, self) }
@@ -97,7 +105,7 @@ module Cucumber
         model_class = build_strategy.model_class
         attributes = {}
         if raw_attributes.try(:strip).present?
-          raw_attributes.scan(/(?:the |and |with |but |,| )+(.*?) ("[^\"]*"|above|[\d\.]+)/).each do |fragment|
+          raw_attributes.scan(/(?:the |and |with |but |,| )+(.*?) (#{VALUE_SCALAR}|#{VALUE_ARRAY}|#{VALUE_LAST_RECORD})/).each do |fragment|
             attribute = attribute_name_from_prose(fragment[0])
             value = fragment[1]
             attributes[attribute] = attribute_value(world, model_class, attribute, value)
@@ -134,33 +142,47 @@ module Cucumber
       def attribute_value(world, model_class, attribute, value)
         association = model_class.respond_to?(:reflect_on_association) ? model_class.reflect_on_association(attribute) : nil
         if association.present?
-          if value == "above"
+          if matches_fully?(value, VALUE_LAST_RECORD)
             value = CucumberFactory::Switcher.find_last(association.klass) or raise Error, "There is no last #{attribute}"
-          elsif value.start_with?('"')
+          elsif matches_fully?(value, VALUE_STRING)
             value = unquote(value)
             value = get_named_record(world, value) || transform_value(world, value)
           else
             raise Error, "Cannot set association #{model_class}##{attribute} to #{value}. To identify a previously created record, use `above` or a quoted string."
           end
+        elsif matches_fully?(value, VALUE_ARRAY)
+          elements_str = unquote(value)
+          value = elements_str.scan(VALUE_SCALAR).map { |v| resolve_scalar_value(world, model_class, attribute, v) }
         else
-          if value.start_with?('"')
-            value = unquote(value)
-            value = transform_value(world, value)
-          elsif value =~ /\A\d+\z/
-            value = value.to_i
-          elsif value =~ /\A[\d\.]+\z/
-            value = BigDecimal(value)
-          else
-            raise Error, "Cannot set attribute #{model_class}##{attribute} to #{value}."
-          end
+          value = resolve_scalar_value(world, model_class, attribute, value)
+        end
+        value
+      end
+
+      def resolve_scalar_value(world, model_class, attribute, value)
+        if matches_fully?(value, VALUE_STRING)
+          value = unquote(value)
+          value = transform_value(world, value)
+        elsif matches_fully?(value, VALUE_INTEGER)
+          value = value.to_i
+        elsif matches_fully?(value, VALUE_DECIMAL)
+          value = BigDecimal(value)
+        else
+          raise Error, "Cannot set attribute #{model_class}##{attribute} to #{value}."
         end
         value
       end
 
       def unquote(string)
-        string = string.sub(/\A"/, '')
-        string = string.sub(/"\z/, '')
-        string
+        string[1, string.length - 2]
+      end
+
+      def full_regexp(partial_regexp)
+        Regexp.new("\\A" + partial_regexp.source + "\\z", partial_regexp.options)
+      end
+
+      def matches_fully?(string, partial_regexp)
+        string =~ full_regexp(partial_regexp)
       end
 
       def transform_value(world, value)

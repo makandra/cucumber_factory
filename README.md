@@ -10,19 +10,22 @@ cucumber_factory allows you to create ActiveRecord objects directly from your [C
 Basic usage
 -----------
 
-To create a new record with default attributes:
+To create a new record with default attributes, begin any step with `Given there is`:
 
 ```cucumber
 Given there is a movie
 ```
 
-To create the record, cucumber_factory will call [`Movie.make`](http://github.com/notahat/machinist), [`Factory.create(:movie)`](http://github.com/thoughtbot/factory_bot), [`Movie.create!`](http://apidock.com/rails/ActiveRecord/Persistence/ClassMethods/create%21) or `Movie.new`, depending on what's available.
+To create the record, cucumber_factory will call [`FactoryBot.create(:movie)`](http://github.com/thoughtbot/factory_bot), `FactoryGirl.create(:movie)`, [`Movie.make`](http://github.com/notahat/machinist), [`Movie.create!`](http://apidock.com/rails/ActiveRecord/Persistence/ClassMethods/create%21) or `Movie.new`, depending on what's available.
 
-To create a new record with attributes set, start a step with `Given there is`. Quoted strings and numbers denote attribute values:
+Quoted strings and numbers denote attribute values:
 
 ```cucumber
 Given there is a movie with the title "Sunshine" and the year 2007
 ```
+
+Setting boolean attributes
+--------------------------
 
 Boolean attributes can be set by appending `which`, `that` or `who` at the end:
 
@@ -39,21 +42,6 @@ Given there is a movie which is awesome, popular and successful but not science 
 And there is a director with the income "500000" but with the account balance "-30000"
 ```
 
-If you have many attribute assignments you can use doc string or data table:
-
-```cucumber
-Given there is a movie with these attributes:
-  """
-  name: Sunshine
-  comedy: false
-  """
-```
-
-```cucumber
-Given there is a movie with these attributes:
-  | name   | Sunshine |
-  | comedy | false    |
-```
 
 Setting associations
 --------------------
@@ -102,10 +90,8 @@ Given there is a movie with the prequel above and these attributes:
   | comedy | false    |
 ```
 
-Support for popular factory gems
+Using named factories and traits
 --------------------------------
-
-[Machinist blueprints](http://github.com/notahat/machinist) and [factory_bot factories](http://github.com/thoughtbot/factory_bot) will be used when available.
 
 You can use a [FactoryBot child factory](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#inheritance) or [Machinist named blueprint](https://github.com/notahat/machinist/tree/1.0-maintenance#named-blueprints) by putting the variant name in parentheses:
 
@@ -120,8 +106,38 @@ Given there is a movie (moody, dark) with the title "Interstellar"
 ```
 
 
+
+Setting many attributes with a table
+------------------------------------
+
+If you have many attribute assignments you can use doc string or data table:
+
+```cucumber
+Given there is a movie with these attributes:
+  """
+  name: Sunshine
+  comedy: false
+  """
+```
+
+```cucumber
+Given there is a movie with these attributes:
+  | name   | Sunshine |
+  | comedy | false    |
+```
+
+Setting array attributes
+------------------------
+
+When using [PostgreSQL array columns](https://www.postgresql.org/docs/9.1/static/arrays.html), you can set an array attribute to a value with square brackets:
+
+```cucumber
+Given there is a movie with the tags ["comedy", "drama"]
+```
+
+
 Overriding factory steps
------------------------
+------------------------
 
 If you want to override a factory step with your own version, just do so:
 
