@@ -115,7 +115,7 @@ Setting array attributes or has_many associations
 
 You can set `has_many` associations by referring to multiple named records in square brackets:
 
-```
+```cucumber
 Given there is a movie with the title "Sunshine"
 And there is a movie with the title "Limitless"
 And there is a movie with the title "Salt"
