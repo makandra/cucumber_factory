@@ -141,7 +141,11 @@ module Cucumber
 
       def attribute_value(world, model_class, attribute, value)
         association = model_class.respond_to?(:reflect_on_association) ? model_class.reflect_on_association(attribute) : nil
-        if association.present?
+
+        if matches_fully?(value, VALUE_ARRAY)
+          elements_str = unquote(value)
+          value = elements_str.scan(VALUE_SCALAR).map { |v| attribute_value(world, model_class, attribute, v) }
+        elsif association.present?
           if matches_fully?(value, VALUE_LAST_RECORD)
             value = CucumberFactory::Switcher.find_last(association.klass) or raise Error, "There is no last #{attribute}"
           elsif matches_fully?(value, VALUE_STRING)
@@ -150,9 +154,6 @@ module Cucumber
           else
             raise Error, "Cannot set association #{model_class}##{attribute} to #{value}. To identify a previously created record, use `above` or a quoted string."
           end
-        elsif matches_fully?(value, VALUE_ARRAY)
-          elements_str = unquote(value)
-          value = elements_str.scan(VALUE_SCALAR).map { |v| resolve_scalar_value(world, model_class, attribute, v) }
         else
           value = resolve_scalar_value(world, model_class, attribute, value)
         end

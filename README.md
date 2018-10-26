@@ -43,6 +43,25 @@ And there is a director with the income "500000" but with the account balance "-
 ```
 
 
+Setting many attributes with a table
+------------------------------------
+
+If you have many attribute assignments you can use doc string or data table:
+
+```cucumber
+Given there is a movie with these attributes:
+  """
+  name: Sunshine
+  comedy: false
+  """
+```
+
+```cucumber
+Given there is a movie with these attributes:
+  | name   | Sunshine |
+  | comedy | false    |
+```
+
 Setting associations
 --------------------
 
@@ -90,6 +109,28 @@ Given there is a movie with the prequel above and these attributes:
   | comedy | false    |
 ```
 
+
+Setting array attributes or has_many associations
+-------------------------------------------------
+
+You can set `has_many` associations by referring to multiple named records in square brackets:
+
+```
+Given there is a movie with the title "Sunshine"
+And there is a movie with the title "Limitless"
+And there is a movie with the title "Salt"
+And there is a user with the favorite movies ["Sunshine", "Limitless" and "Salt"]
+```
+
+When using [PostgreSQL array columns](https://www.postgresql.org/docs/9.1/static/arrays.html), you can set an array attribute to a value with square brackets:
+
+```cucumber
+Given there is a movie with the tags ["comedy", "drama" and "action"]
+```
+
+
+
+
 Using named factories and traits
 --------------------------------
 
@@ -106,34 +147,6 @@ Given there is a movie (moody, dark) with the title "Interstellar"
 ```
 
 
-
-Setting many attributes with a table
-------------------------------------
-
-If you have many attribute assignments you can use doc string or data table:
-
-```cucumber
-Given there is a movie with these attributes:
-  """
-  name: Sunshine
-  comedy: false
-  """
-```
-
-```cucumber
-Given there is a movie with these attributes:
-  | name   | Sunshine |
-  | comedy | false    |
-```
-
-Setting array attributes
-------------------------
-
-When using [PostgreSQL array columns](https://www.postgresql.org/docs/9.1/static/arrays.html), you can set an array attribute to a value with square brackets:
-
-```cucumber
-Given there is a movie with the tags ["comedy", "drama"]
-```
 
 
 Overriding factory steps

@@ -309,6 +309,29 @@ describe 'steps provided by cucumber_factory' do
     obj.attributes[:tags].should == []
   end
 
+  it 'should allow to separate array values with either a comma or "and"' do
+    invoke_cucumber_step('there is a plain Ruby class with the tags ["foo", "bar" and "baz"] and the list ["bam", "baz" and "qux"]')
+    obj = PlainRubyClass.last
+    obj.attributes[:tags].should == ['foo', 'bar', 'baz']
+    obj.attributes[:list].should == ['bam', 'baz', 'qux']
+  end
+
+  it 'should allow to separate array values with an Oxford comma' do
+    invoke_cucumber_step('there is a plain Ruby class with the tags ["foo", "bar", and "baz"] and the list ["bam", "baz", and "qux"]')
+    obj = PlainRubyClass.last
+    obj.attributes[:tags].should == ['foo', 'bar', 'baz']
+    obj.attributes[:list].should == ['bam', 'baz', 'qux']
+  end
+
+  it "should allow to set a has_many association by refering to multiple named records in square brackets" do
+    invoke_cucumber_step('there is a movie with the title "Sunshine"')
+    invoke_cucumber_step('there is a movie with the title "Limitless"')
+    invoke_cucumber_step('there is a user with the reviewed movies ["Sunshine" and "Limitless"]')
+    user = User.last
+    reviewed_movie_titles = user.reviewed_movies.map(&:title)
+    reviewed_movie_titles.should =~ ['Sunshine', 'Limitless']
+  end
+
   it "should allow attribute names starting with 'the'" do
     PlainRubyClass.should_receive(:new).with({:theme => 'Sci-fi'})
     invoke_cucumber_step('there is a plain ruby class with the theme "Sci-fi"')
