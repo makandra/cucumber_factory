@@ -2,6 +2,7 @@ require 'cucumber/factory/build_strategy'
 
 module Cucumber
   class Factory
+    class Error < StandardError; end
 
     ATTRIBUTES_PATTERN = '( with the .+?)?( (?:which|who|that) is .+?)?'
     TEXT_ATTRIBUTES_PATTERN = ' (?:with|and) these attributes:'
@@ -96,11 +97,10 @@ module Cucumber
         model_class = build_strategy.model_class
         attributes = {}
         if raw_attributes.try(:strip).present?
-          raw_attributes.scan(/(?:the |and |with |but |,| )+(.*?) ("([^\"]*)"|above)/).each do |fragment|
+          raw_attributes.scan(/(?:the |and |with |but |,| )+(.*?) ("[^\"]*"|above|[\d\.]+)/).each do |fragment|
             attribute = attribute_name_from_prose(fragment[0])
-            value_type = fragment[1] # 'above' or a quoted string
-            value = fragment[2] # the value string without quotes
-            attributes[attribute] = attribute_value(world, model_class, attribute, value_type, value)
+            value = fragment[1]
+            attributes[attribute] = attribute_value(world, model_class, attribute, value)
           end
         end
         if raw_boolean_attributes.try(:strip).present?
@@ -131,18 +131,36 @@ module Cucumber
         record
       end
 
-      def attribute_value(world, model_class, attribute, value_type, value)
+      def attribute_value(world, model_class, attribute, value)
         association = model_class.respond_to?(:reflect_on_association) ? model_class.reflect_on_association(attribute) : nil
         if association.present?
-          if value_type == "above"
-            value = CucumberFactory::Switcher.find_last(association.klass) or raise "There is no last #{attribute}"
-          else
+          if value == "above"
+            value = CucumberFactory::Switcher.find_last(association.klass) or raise Error, "There is no last #{attribute}"
+          elsif value.start_with?('"')
+            value = unquote(value)
             value = get_named_record(world, value) || transform_value(world, value)
+          else
+            raise Error, "Cannot set association #{model_class}##{attribute} to #{value}. To identify a previously created record, use `above` or a quoted string."
           end
         else
-          value = transform_value(world, value)
+          if value.start_with?('"')
+            value = unquote(value)
+            value = transform_value(world, value)
+          elsif value =~ /\A\d+\z/
+            value = value.to_i
+          elsif value =~ /\A[\d\.]+\z/
+            value = BigDecimal(value)
+          else
+            raise Error, "Cannot set attribute #{model_class}##{attribute} to #{value}."
+          end
         end
         value
+      end
+
+      def unquote(string)
+        string = string.sub(/\A"/, '')
+        string = string.sub(/"\z/, '')
+        string
       end
 
       def transform_value(world, value)

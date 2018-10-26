@@ -18,10 +18,10 @@ Given there is a movie
 
 To create the record, cucumber_factory will call [`Movie.make`](http://github.com/notahat/machinist), [`Factory.create(:movie)`](http://github.com/thoughtbot/factory_bot), [`Movie.create!`](http://apidock.com/rails/ActiveRecord/Persistence/ClassMethods/create%21) or `Movie.new`, depending on what's available.
 
-To create a new record with attributes set, you can say:
+To create a new record with attributes set, start a step with `Given there is`. Quoted strings and numbers denote attribute values:
 
 ```cucumber
-Given there is a movie with the title "Sunshine" and the year "2007"
+Given there is a movie with the title "Sunshine" and the year 2007
 ```
 
 Boolean attributes can be set by appending `which`, `that` or `who` at the end:

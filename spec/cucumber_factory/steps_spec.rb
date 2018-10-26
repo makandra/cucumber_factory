@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe 'steps provided by cucumber_factory' do
 
   before(:each) do
@@ -198,7 +197,7 @@ describe 'steps provided by cucumber_factory' do
   it "should raise a proper error if there is no previous record when saying 'above'" do
     lambda do
       invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above and the prequel above')
-    end.should raise_error(RuntimeError, "There is no last reviewer")
+    end.should raise_error(/There is no last reviewer/i)
   end
 
   it "should reload an object assigned to a belongs_to before assigning" do
@@ -272,6 +271,22 @@ describe 'steps provided by cucumber_factory' do
     user.scared.should == true
     user.scared_by_spiders.should == true
     user.deleted.should == true
+  end
+
+  it "should allow to set integer attributes without surrounding quotes" do
+    invoke_cucumber_step('there is a plain Ruby class with the amount 123 and the total 456')
+    obj = PlainRubyClass.last
+    obj.attributes[:amount].should == 123
+    obj.attributes[:total].should == 456
+  end
+
+  it "should allow to set decimal attributes without surrounding quotes" do
+    invoke_cucumber_step('there is a plain Ruby class with the amount 1.23 and the total 45.6')
+    obj = PlainRubyClass.last
+    obj.attributes[:amount].should be_a(BigDecimal)
+    obj.attributes[:amount].to_s.should == "1.23"
+    obj.attributes[:total].should be_a(BigDecimal)
+    obj.attributes[:total].to_s.should == "45.6"
   end
 
   it "should allow attribute names starting with 'the'" do
