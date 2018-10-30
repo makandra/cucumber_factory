@@ -206,7 +206,7 @@ module Cucumber
       end
 
       def remember_record_names(world, record, attributes)
-        rememberable_values = attributes.values.select { |v| v.is_a?(String) || v.is_a?(Fixnum) }
+        rememberable_values = attributes.values.select { |v| v.is_a?(String) || v.is_a?(Integer) }
         for value in rememberable_values
           set_named_record(world, value.to_s, record)
         end
