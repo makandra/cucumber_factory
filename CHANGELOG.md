@@ -13,7 +13,18 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
--
+- A step was added that allows modifying existing records with a similar syntax to creating new records:
+  ```cucumber
+  (Given "Bob" is a user)
+    And "Bob" has the email "foo@bar.com" and is subscribed
+  ```
+  - This step will also work with doc strings or tables:
+  ```cucumber
+  (Given "Bob" is a user)
+    And the user above has these attributes:
+    | name  | Bob         |
+    | email | foo@bar.com | 
+  ```
 
 ## 2.1.1 - 2020-05-20
 

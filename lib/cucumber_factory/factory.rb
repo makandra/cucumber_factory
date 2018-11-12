@@ -2,11 +2,14 @@ module CucumberFactory
   module Factory
     class Error < StandardError; end
 
-    ATTRIBUTES_PATTERN = '( with the .+?)?( (?:which|who|that) is .+?)?'
+    ATTRIBUTES_PATTERN = '( with the .+?)?( (?:which|who|that) is .+?)?' # ... with the year 1979 which is science fiction
     TEXT_ATTRIBUTES_PATTERN = ' (?:with|and) these attributes:'
+    UPDATE_ATTR_PATTERN = '(?: (?:has|belongs to)( the .+?))?(?:(?: and| but|,)*( is .+?))?' # ... belongs to the collection "Fantasy" and is trending
+    TEXT_UPDATE_ATTR_PATTERN = '(?: and|,)* has these attributes:'
 
-    RECORD_PATTERN = 'there is an? (.+?)( \(.+?\))?'
-    NAMED_RECORD_PATTERN = '(?:"([^\"]*)"|\'([^\']*)\') is an? (.+?)( \(.+?\))?'
+    RECORD_PATTERN = 'there is an? (.+?)( \(.+?\))?' # Given there is a movie (comedy)
+    NAMED_RECORD_PATTERN = '(?:"([^\"]*)"|\'([^\']*)\') is an? (.+?)( \(.+?\))?' # Given "LotR" is a movie
+    RECORD_UPDATE_PATTERN = 'the (.+?) (above|".+?"|\'.+?\')' # Given the movie "LotR" ...
 
     NAMED_RECORDS_VARIABLE = :'@named_cucumber_factory_records'
 
@@ -39,6 +42,12 @@ module CucumberFactory
       :block => lambda { |a1, a2, a3, a4| CucumberFactory::Factory.send(:parse_creation, self, a1, a2, a3, a4) }
     }
 
+    UPDATE_STEP_DESCRIPTOR = {
+      :kind => :And,
+      :pattern => /^#{RECORD_UPDATE_PATTERN}#{UPDATE_ATTR_PATTERN}$/,
+      :block => lambda { |a1, a2, a3, a4| CucumberFactory::Factory.send(:parse_update, self, a1, a2, a3, a4) }
+    }
+
     NAMED_CREATION_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES = {
       :kind => :Given,
       :pattern => /^#{NAMED_RECORD_PATTERN}#{ATTRIBUTES_PATTERN}#{TEXT_ATTRIBUTES_PATTERN}?$/,
@@ -53,6 +62,13 @@ module CucumberFactory
       :priority => true
     }
 
+    UPDATE_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES = {
+      :kind => :And,
+      :pattern => /^#{RECORD_UPDATE_PATTERN}#{UPDATE_ATTR_PATTERN}#{TEXT_UPDATE_ATTR_PATTERN}$/,
+      :block => lambda { |a1, a2, a3, a4, a5| CucumberFactory::Factory.send(:parse_update, self, a1, a2, a3, a4, a5) },
+      :priority => true
+    }
+
     class << self
 
       def add_steps(main)
@@ -61,6 +77,8 @@ module CucumberFactory
         add_step(main, CREATION_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES)
         add_step(main, NAMED_CREATION_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES)
         add_step(main, CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR)
+        add_step(main, UPDATE_STEP_DESCRIPTOR)
+        add_step(main, UPDATE_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES)
       end
 
       private
@@ -100,8 +118,24 @@ module CucumberFactory
       end
 
       def parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes, raw_multiline_attributes = nil)
-        build_strategy, transient_attributes = BuildStrategy.from_prose(raw_model, raw_variant)
+        build_strategy, transient_attributes = CucumberFactory::BuildStrategy.from_prose(raw_model, raw_variant)
         model_class = build_strategy.model_class
+        attributes = parse_attributes(world, model_class, raw_attributes, raw_boolean_attributes, raw_multiline_attributes, transient_attributes)
+        record = build_strategy.create_record(attributes)
+        remember_record_names(world, record, attributes)
+        record
+      end
+
+      def parse_update(world, raw_model, raw_name, raw_attributes, raw_boolean_attributes, raw_multiline_attributes = nil)
+        model_class = CucumberFactory::BuildStrategy.parse_model_class(raw_model)
+        attributes = parse_attributes(world, model_class, raw_attributes, raw_boolean_attributes, raw_multiline_attributes)
+        record = resolve_associated_value(world, model_class, model_class, model_class, raw_name)
+        CucumberFactory::UpdateStrategy.new(record).assign_attributes(attributes)
+        remember_record_names(world, record, attributes)
+        record
+      end
+
+      def parse_attributes(world, model_class, raw_attributes, raw_boolean_attributes, raw_multiline_attributes = nil, transient_attributes = [])
         attributes = {}
         if raw_attributes.try(:strip).present?
           raw_attribute_fragment_regex = /(?:the |and |with |but |,| )+(.*?) (#{VALUE_SCALAR}|#{VALUE_ARRAY}|#{VALUE_LAST_RECORD})/
@@ -140,33 +174,19 @@ module CucumberFactory
             end
           end
         end
-        record = build_strategy.create_record(attributes)
-        remember_record_names(world, record, attributes)
-        record
+        attributes
       end
 
       def attribute_value(world, model_class, transient_attributes, attribute, value)
         associated, association_class = resolve_association(attribute, model_class, transient_attributes)
 
-        if matches_fully?(value, VALUE_ARRAY)
-          elements_str = unquote(value)
-          value = elements_str.scan(VALUE_SCALAR).map { |v| attribute_value(world, model_class, transient_attributes, attribute, v) }
+        value = if matches_fully?(value, VALUE_ARRAY)
+          array_values = unquote(value).scan(VALUE_SCALAR)
+          array_values.map { |v| attribute_value(world, model_class, transient_attributes, attribute, v) }
         elsif associated
-          if matches_fully?(value, VALUE_LAST_RECORD)
-            raise(Error, "Cannot set last #{model_class}##{attribute} for polymorphic associations") unless association_class.present?
-
-            value = CucumberFactory::Switcher.find_last(association_class) || raise(Error, "There is no last #{attribute}")
-          elsif matches_fully?(value, VALUE_STRING)
-            value = unquote(value)
-            value = get_named_record(world, value) || transform_value(world, value)
-          elsif matches_fully?(value, VALUE_INTEGER)
-            value = value.to_s
-            value = get_named_record(world, value) || transform_value(world, value)
-          else
-            raise Error, "Cannot set association #{model_class}##{attribute} to #{value}."
-          end
+          resolve_associated_value(world, model_class, association_class, attribute, value)
         else
-          value = resolve_scalar_value(world, model_class, attribute, value)
+          resolve_scalar_value(world, model_class, attribute, value)
         end
         value
       end
@@ -190,6 +210,22 @@ module CucumberFactory
           associated = false
         end
         [associated, association_class]
+      end
+
+      def resolve_associated_value(world, model_class, association_class, attribute, value)
+        if matches_fully?(value, VALUE_LAST_RECORD)
+          raise(Error, "Cannot set last #{model_class}##{attribute} for polymorphic associations") unless association_class.present?
+
+          CucumberFactory::Switcher.find_last(association_class) || raise(Error, "There is no last #{attribute}")
+        elsif matches_fully?(value, VALUE_STRING)
+          value = unquote(value)
+          get_named_record(world, value) || transform_value(world, value)
+        elsif matches_fully?(value, VALUE_INTEGER)
+          value = value.to_s
+          get_named_record(world, value) || transform_value(world, value)
+        else
+          raise Error, "Cannot set association #{model_class}##{attribute} to #{value}."
+        end
       end
 
       def resolve_scalar_value(world, model_class, attribute, value)

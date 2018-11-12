@@ -111,7 +111,7 @@ describe 'steps provided by cucumber_factory' do
       payment.id.should == 2
     end
 
-    it "should allow to name records and set a belongs_to association to that record by refering to that name" do
+    it "should allow to name records and set a belongs_to association to that record by referring to that name" do
       invoke_cucumber_step('"Some Prequel" is a movie with the title "Before Sunrise"')
       invoke_cucumber_step('there is a movie with the title "Limitless"')
       invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Some Prequel"')
@@ -120,7 +120,7 @@ describe 'steps provided by cucumber_factory' do
       movie.prequel.should == prequel
     end
 
-    it "should allow to set a belongs_to association to a previously created record by refering to any string attribute of that record" do
+    it "should allow to set a belongs_to association to a previously created record by referring to any string attribute of that record" do
       invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
       invoke_cucumber_step('there is a movie with the title "Limitless"')
       invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Before Sunrise"')
@@ -129,7 +129,17 @@ describe 'steps provided by cucumber_factory' do
       movie.prequel.should == prequel
     end
 
-    it "should allow to set a belongs_to association to a previously created record by refering to their explicitely set primary keys" do
+    it "should allow to set a belongs_to association to a previously updated record by referring to any string attribute used when updating" do
+      invoke_cucumber_step('there is a movie')
+      invoke_cucumber_step('the movie above has the title "Before Sunrise"')
+      invoke_cucumber_step('there is a movie with the title "Limitless"')
+      invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Before Sunrise"')
+      movie = Movie.find_by_title!('Before Sunset')
+      prequel = Movie.find_by_title!('Before Sunrise')
+      movie.prequel.should == prequel
+    end
+
+    it "should allow to set a belongs_to association to a previously created record by referring to their explicitely set primary keys" do
       invoke_cucumber_step('there is a movie with the ID 123')
       invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel 123')
       movie = Movie.find_by_title!('Before Sunset')
@@ -200,6 +210,15 @@ describe 'steps provided by cucumber_factory' do
       user.deleted.should == true
     end
 
+    it "should allow to name records and set a belongs_to association to that record by referring to that name" do
+      invoke_cucumber_step('"Some Prequel" is a movie with the title "Before Sunrise"')
+      invoke_cucumber_step('there is a movie with the title "Limitless"')
+      invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Some Prequel"')
+      movie = Movie.find_by_title!('Before Sunset')
+      prequel = Movie.find_by_title!('Before Sunrise')
+      movie.prequel.should == prequel
+    end
+
     it "should allow to set positive boolean attributes with 'which' after the attribute list" do
       user = User.new
       User.stub(:new => user)
@@ -259,7 +278,7 @@ describe 'steps provided by cucumber_factory' do
       user.deleted.should == true
     end
 
-    it "should allow to set a has_many association by refering to multiple named records in square brackets" do
+    it "should allow to set a has_many association by referring to multiple named records in square brackets" do
       invoke_cucumber_step('there is a movie with the title "Sunshine"')
       invoke_cucumber_step('there is a movie with the title "Limitless"')
       invoke_cucumber_step('there is a user with the reviewed movies ["Sunshine" and "Limitless"]')
@@ -535,6 +554,55 @@ tags: ["foo", "bar"]
       lambda { invoke_cucumber_step("there is a machinist model with the attribute NOQUOTES") }.should raise_error(ArgumentError, 'Unable to parse attributes " with the attribute NOQUOTES".')
       lambda { invoke_cucumber_step("there is a machinist model with the attribute 'foo' and the ") }.should raise_error(ArgumentError, 'Unable to parse attributes " and the ".')
       lambda { invoke_cucumber_step("there is a machinist model with the attribute 'foo'. the other_attribute 'bar' and the third attribute 'baz'") }.should raise_error(ArgumentError, 'Unable to parse attributes ".".')
+    end
+
+    it "should allow to update the last record of a type" do
+      invoke_cucumber_step('there is a user with the name "Bar" and the email "foo@example.com" who is not subscribed')
+      invoke_cucumber_step('the user above has the name "Baz", the email "foobar@example.com", and is subscribed')
+      user = User.last
+      user.name.should == 'Baz'
+      user.email.should == 'foobar@example.com'
+      user.subscribed.should == true
+    end
+
+    it "should be able to update a record with a given name" do
+      invoke_cucumber_step('"Foo" is a user with the name "Bar"')
+      invoke_cucumber_step('the user "Foo" has the email "foo@example.com"')
+      invoke_cucumber_step("the user 'Foo' is subscribed")
+      user = User.last
+      user.name.should == 'Bar'
+      user.email.should == 'foo@example.com'
+      user.subscribed.should == true
+    end
+
+    it "should be able to update a record with a Cucumber table expression" do
+      invoke_cucumber_step('"Foo" is a user with the name "Bar"')
+      invoke_cucumber_step('the user above has these attributes:', nil, <<-DATA_TABLE)
+| name   | Jane |
+| locked | true |
+      DATA_TABLE
+      user = User.last
+      user.name.should == "Jane"
+      user.locked.should == true
+    end
+
+    it "should allow to update a record via additional data table" do
+      invoke_cucumber_step('"Foo" is a user with the name "Bar"')
+      invoke_cucumber_step('the user above has the email "test@invalid.com", is subscribed, and has these attributes:', nil, <<-DATA_TABLE)
+| name | Jane |
+      DATA_TABLE
+      user = User.last
+      user.name.should == "Jane"
+      user.email.should == "test@invalid.com"
+      user.subscribed.should == true
+    end
+
+    it "should allow to update an association" do
+      invoke_cucumber_step('there is a movie with the title "Before Sunrise"')
+      invoke_cucumber_step('there is a user with the name "John"')
+      invoke_cucumber_step('the movie above has the reviewer above')
+      movie = Movie.last
+      movie.reviewer.name.should == "John"
     end
   end
 end

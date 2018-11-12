@@ -13,6 +13,7 @@ require 'cucumber_priority'
 
 # Gem
 require 'cucumber_factory/build_strategy'
+require 'cucumber_factory/update_strategy'
 require 'cucumber_factory/factory'
 require 'cucumber_factory/switcher'
 

@@ -22,6 +22,10 @@ module CucumberFactory
         [strategy, transient_attributes]
       end
 
+      def parse_model_class(model_prose)
+        underscored_model_name(model_prose).camelize.constantize
+      end
+
       private
 
       def variants_from_prose(variant_prose)
@@ -85,7 +89,7 @@ module CucumberFactory
       end
 
       def alternative_strategy(model_prose, variants)
-        model_class = underscored_model_name(model_prose).camelize.constantize
+        model_class = parse_model_class(model_prose)
         machinist_strategy(model_class, variants) ||
           active_record_strategy(model_class) ||
           ruby_object_strategy(model_class)

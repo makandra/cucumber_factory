@@ -24,6 +24,13 @@ Quoted strings and numbers denote attribute values:
 Given there is a movie with the title "Sunshine" and the year 2007
 ```
 
+To update an existing record, specify the record and the changes:
+```
+Given the movie above has the title "Sunset" and the year 2008
+Given the movie "Sunrise" has the year 2009
+```
+A record can be specified by the `above` keyword, which uses the last created record of this class, or by any string that was used during its creation.
+
 Setting boolean attributes
 --------------------------
 
@@ -40,6 +47,13 @@ Instead of `and` you can also use `but` and commas to join sentences:
 ```cucumber
 Given there is a movie which is awesome, popular and successful but not science fiction
 And there is a director with the income "500000" but with the account balance "-30000"
+```
+
+To update boolean attributes use the keyword `is`:
+
+```cucumber
+Given the movie above is awesome but not popular
+Given the movie above has the year 1979 but is not science fiction
 ```
 
 
@@ -60,6 +74,14 @@ Given there is a movie with these attributes:
 Given there is a movie with these attributes:
   | name   | Sunshine |
   | comedy | false    |
+```
+
+```cucumber
+Given the movie above has these attributes:
+  """
+  name: Sunshine
+  comedy: false
+  """
 ```
 
 Setting associations
