@@ -1,5 +1,5 @@
 PATH
-  remote: ..
+  remote: .
   specs:
     cucumber_factory (1.14.2)
       activerecord
