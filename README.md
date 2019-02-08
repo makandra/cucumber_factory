@@ -180,7 +180,7 @@ In your `Gemfile` say:
 
 Now create a file `features/step_definitions/factory_steps.rb`, which just says
 
-    Cucumber::Factory.add_steps(self)
+    require 'cucumber_factory/add_steps'
 
 Now run `bundle install` and restart your server.
 

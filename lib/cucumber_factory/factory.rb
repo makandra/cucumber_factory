@@ -1,7 +1,5 @@
-require 'cucumber/factory/build_strategy'
-
-module Cucumber
-  class Factory
+module CucumberFactory
+  module Factory
     class Error < StandardError; end
 
     ATTRIBUTES_PATTERN = '( with the .+?)?( (?:which|who|that) is .+?)?'
@@ -22,7 +20,7 @@ module Cucumber
 
     CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR = {
       :kind => :Before,
-      :block => proc { Cucumber::Factory.send(:reset_named_records, self) }
+      :block => proc { CucumberFactory::Factory.send(:reset_named_records, self) }
     }
 
     # We cannot use vararg blocks in the descriptors in Ruby 1.8, as explained by
@@ -32,26 +30,26 @@ module Cucumber
     NAMED_CREATION_STEP_DESCRIPTOR = {
       :kind => :Given,
       :pattern => /^#{NAMED_RECORD_PATTERN}#{ATTRIBUTES_PATTERN}?$/,
-      :block => lambda { |a1, a2, a3, a4, a5| Cucumber::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5) }
+      :block => lambda { |a1, a2, a3, a4, a5| CucumberFactory::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5) }
     }
 
     CREATION_STEP_DESCRIPTOR = {
       :kind => :Given,
       :pattern => /^#{RECORD_PATTERN}#{ATTRIBUTES_PATTERN}$/,
-      :block => lambda { |a1, a2, a3, a4| Cucumber::Factory.send(:parse_creation, self, a1, a2, a3, a4) }
+      :block => lambda { |a1, a2, a3, a4| CucumberFactory::Factory.send(:parse_creation, self, a1, a2, a3, a4) }
     }
 
     NAMED_CREATION_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES = {
       :kind => :Given,
       :pattern => /^"#{NAMED_RECORD_PATTERN}#{ATTRIBUTES_PATTERN}#{TEXT_ATTRIBUTES_PATTERN}?$/,
-      :block => lambda { |a1, a2, a3, a4, a5, a6| Cucumber::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5, a6) },
+      :block => lambda { |a1, a2, a3, a4, a5, a6| CucumberFactory::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5, a6) },
       :priority => true
     }
 
     CREATION_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES = {
       :kind => :Given,
       :pattern => /^#{RECORD_PATTERN}#{ATTRIBUTES_PATTERN}#{TEXT_ATTRIBUTES_PATTERN}$/,
-      :block => lambda { |a1, a2, a3, a4, a5| Cucumber::Factory.send(:parse_creation, self, a1, a2, a3, a4, a5) },
+      :block => lambda { |a1, a2, a3, a4, a5| CucumberFactory::Factory.send(:parse_creation, self, a1, a2, a3, a4, a5) },
       :priority => true
     }
 
@@ -94,12 +92,12 @@ module Cucumber
       def set_named_record(world, name, record)
         named_records(world)[name] = record
       end
-  
+
       def parse_named_creation(world, name, raw_model, raw_variant, raw_attributes, raw_boolean_attributes, raw_multiline_attributes = nil)
         record = parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes, raw_multiline_attributes)
         set_named_record(world, name, record)
       end
-    
+
       def parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes, raw_multiline_attributes = nil)
         build_strategy = BuildStrategy.from_prose(raw_model, raw_variant)
         model_class = build_strategy.model_class

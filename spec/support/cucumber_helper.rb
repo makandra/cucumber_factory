@@ -17,7 +17,8 @@ def prepare_cucumber_example
     @main.extend(Cucumber::RbSupport::RbDsl)
   end
 
-  Cucumber::Factory.add_steps(@main)
+  add_steps_filepath = File.expand_path(File.join(File.dirname(__FILE__), '../../lib/cucumber_factory/add_steps.rb'))
+  @main.instance_eval(File.read(add_steps_filepath))
 end
 
 def invoke_cucumber_step(step, doc_string = nil, data_table = nil)

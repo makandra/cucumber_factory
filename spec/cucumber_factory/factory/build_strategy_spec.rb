@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Cucumber::Factory::BuildStrategy do
+describe CucumberFactory::BuildStrategy do
 
-  subject { Cucumber::Factory::BuildStrategy }
+  subject { CucumberFactory::BuildStrategy }
 
   # most of the behaviour is integration tested in steps_spec.rb
 

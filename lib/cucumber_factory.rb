@@ -12,5 +12,19 @@ end
 require 'cucumber_priority'
 
 # Gem
-require 'cucumber/factory'
+require 'cucumber_factory/build_strategy'
+require 'cucumber_factory/factory'
 require 'cucumber_factory/switcher'
+
+module Cucumber
+  module Factory
+    module_function
+
+    def add_steps(main)
+      warn "Using `Cucumber::Factory.add_steps(self)` is deprecated. Use `require 'cucumber_factory/add_steps'` instead."
+
+      add_steps_filepath = File.join(File.dirname(__FILE__), 'cucumber_factory/add_steps.rb')
+      main.instance_eval(File.read(add_steps_filepath))
+    end
+  end
+end

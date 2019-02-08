@@ -9,11 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Breaking changes
 
--
- 
-### Compatible changes
-
--
+- Moved gem's code from `Cucumber` module into `CucumberFactory` module.
+- Instead of calling `Cucumber::Factory.add_steps(self)`, `require 'cucumber_factory/add_steps'` instead.
 
 
 ## 1.14.2 - 2018-10-31
