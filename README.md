@@ -194,7 +194,7 @@ There are tests in `spec`. We only accept PRs with tests. To run tests:
 - Create a local MySQL database `cucumber_factory_test`
 - Copy `spec/support/database.sample.yml` to `spec/support/database.yml` and enter your local credentials for the test databases
 - Install development dependencies using `bundle install`
-- Run tests with the default symlinked Gemfile using `bundle exec rspec` or explicit with `BUNDLE_GEMFILE=gemfiles/Gemfile.cucumber-x.x bundle exec rspec spec`
+- Run tests with the default symlinked Gemfile using `bundle exec rspec` or explicit with `BUNDLE_GEMFILE=Gemfile.cucumber-x.x bundle exec rspec spec`
 
 We recommend to test large changes against multiple versions of Ruby and multiple dependency sets. Supported combinations are configured in `.travis.yml`. We provide some rake tasks to help with this:
 
