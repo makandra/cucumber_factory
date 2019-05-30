@@ -13,6 +13,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
+-
+
+## 1.15.1 - 2019-05-30
+
+### Compatible changes
+
 - Fix: Allow to use array assignments within a doc string or table assignment
 
   Example:
