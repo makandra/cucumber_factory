@@ -190,7 +190,7 @@ Development
 
 There are tests in `spec`. We only accept PRs with tests. To run tests:
 
-- Install Ruby 2.5.0
+- Install Ruby 2.5.3
 - Create a local MySQL database `cucumber_factory_test`
 - Copy `spec/support/database.sample.yml` to `spec/support/database.yml` and enter your local credentials for the test databases
 - Install development dependencies using `bundle install`

@@ -391,6 +391,15 @@ name: Jane
     user.email.should == "test@invalid.com"
   end
 
+  it "should allow to set array attributes via doc string" do
+    invoke_cucumber_step('there is a plain Ruby class with these attributes:', <<-DOC_STRING)
+tags: ["foo", "bar"]
+    DOC_STRING
+
+    obj = PlainRubyClass.last
+    obj.attributes[:tags].should == ['foo', 'bar']
+  end
+
   it "should allow to set attributes via data table" do
     user = User.new
     User.stub(:new => user)
@@ -414,6 +423,15 @@ name: Jane
 
     user.name.should == "Jane"
     user.email.should == "test@invalid.com"
+  end
+
+  it "should allow to set array attributes via data table" do
+    invoke_cucumber_step('there is a plain Ruby class with these attributes:', nil, <<-DATA_TABLE)
+| tags | ["foo", "bar"] |
+    DATA_TABLE
+
+    obj = PlainRubyClass.last
+    obj.attributes[:tags].should == ['foo', 'bar']
   end
 
 end

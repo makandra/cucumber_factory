@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## Unreleased
+
+### Breaking changes
+
+-
+
+### Compatible changes
+
+- Fix: Allow to use array assignments within a doc string or table assignment
+
+  Example:
+
+  ```
+  Given there is a post with these attributes:
+    |tags| ["urgent", "vip"] |
+  ```
+
 ## 1.15.0 - 2019-02-08
 
 ### Breaking changes

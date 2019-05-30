@@ -122,13 +122,15 @@ module CucumberFactory
             raw_multiline_attributes.split("\n").each do |fragment|
               raw_attribute, value = fragment.split(': ')
               attribute = attribute_name_from_prose(raw_attribute)
-              attributes[attribute] = value
+              value = "\"#{value}\"" unless matches_fully?(value, VALUE_ARRAY)
+              attributes[attribute] = attribute_value(world, model_class, attribute, value)
             end
           # DataTable e.g. in raw [["first name", "Jane"], ["last name", "Jenny"]]
           else
             raw_multiline_attributes.raw.each do |raw_attribute, value|
               attribute = attribute_name_from_prose(raw_attribute)
-              attributes[attribute] = value
+              value = "\"#{value}\"" unless matches_fully?(value, VALUE_ARRAY)
+              attributes[attribute] = attribute_value(world, model_class, attribute, value)
             end
           end
         end
