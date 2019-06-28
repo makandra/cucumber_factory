@@ -41,7 +41,3 @@ script: bundle exec rake current_rspec
 sudo: false
 
 cache: bundler
-
-notifications:
-  email:
-    - fail@makandra.de
