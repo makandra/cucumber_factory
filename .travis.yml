@@ -9,6 +9,8 @@ gemfile:
   - Gemfile.cucumber-3.0
   - Gemfile.cucumber-3.1
 
+dist: trusty
+
 matrix:
   exclude:
     - gemfile: Gemfile.cucumber-3.1
