@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cucumber_factory (1.15.0)
+    cucumber_factory (1.15.1)
       activerecord
       activesupport
       cucumber
@@ -86,4 +86,4 @@ DEPENDENCIES
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.17.1
+   1.17.3

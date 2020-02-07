@@ -434,4 +434,28 @@ tags: ["foo", "bar"]
     obj.attributes[:tags].should == ['foo', 'bar']
   end
 
+  it "should allow single quote for attribute values" do
+    MachinistModel.should_receive(:make).with({ :attribute => "foo"})
+    invoke_cucumber_step("there is a machinist model with the attribute 'foo'")
+  end
+
+  it "should allow mixed single and double quotes for different attribute values" do
+    MachinistModel.should_receive(:make).with({ :attribute => "foo", :other_attribute => "bar" })
+    invoke_cucumber_step("there is a machinist model with the attribute 'foo' and the other attribute \"bar\"")
+  end
+
+  it "should allow mixed single quotes for model names" do
+    invoke_cucumber_step("'Some Prequel' is a movie with the title \"Before Sunrise\"")
+    invoke_cucumber_step('there is a movie with the title "Limitless"')
+    invoke_cucumber_step('there is a movie with the title \'Before Sunset\' and the prequel "Some Prequel"')
+    movie = Movie.find_by_title!('Before Sunset')
+    prequel = Movie.find_by_title!('Before Sunrise')
+    movie.prequel.should == prequel
+  end
+
+  it 'should not raise an error for a blank instance name' do
+    MachinistModel.should_receive(:make).with({ :attribute => 'foo' })
+    invoke_cucumber_step("'' is a machinist model with the attribute 'foo'")
+  end
+
 end

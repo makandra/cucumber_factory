@@ -6,13 +6,13 @@ module CucumberFactory
     TEXT_ATTRIBUTES_PATTERN = ' (?:with|and) these attributes:'
 
     RECORD_PATTERN = 'there is an? (.+?)( \(.+?\))?'
-    NAMED_RECORD_PATTERN = '"([^\"]*)" is an? (.+?)( \(.+?\))?'
+    NAMED_RECORD_PATTERN = '(?:"([^\"]*)"|\'([^\']*)\') is an? (.+?)( \(.+?\))?'
 
     NAMED_RECORDS_VARIABLE = :'@named_cucumber_factory_records'
 
     VALUE_INTEGER = /\d+/
     VALUE_DECIMAL = /[\d\.]+/
-    VALUE_STRING = /"[^"]*"/
+    VALUE_STRING = /"[^"]*"|'[^']*'/
     VALUE_ARRAY = /\[[^\]]*\]/
     VALUE_LAST_RECORD = /\babove\b/
 
@@ -30,7 +30,7 @@ module CucumberFactory
     NAMED_CREATION_STEP_DESCRIPTOR = {
       :kind => :Given,
       :pattern => /^#{NAMED_RECORD_PATTERN}#{ATTRIBUTES_PATTERN}?$/,
-      :block => lambda { |a1, a2, a3, a4, a5| CucumberFactory::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5) }
+      :block => lambda { |a1, a2, a3, a4, a5, a6| CucumberFactory::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5, a6) }
     }
 
     CREATION_STEP_DESCRIPTOR = {
@@ -42,7 +42,7 @@ module CucumberFactory
     NAMED_CREATION_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES = {
       :kind => :Given,
       :pattern => /^"#{NAMED_RECORD_PATTERN}#{ATTRIBUTES_PATTERN}#{TEXT_ATTRIBUTES_PATTERN}?$/,
-      :block => lambda { |a1, a2, a3, a4, a5, a6| CucumberFactory::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5, a6) },
+      :block => lambda { |a1, a2, a3, a4, a5, a6, a7| CucumberFactory::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5, a6, a7) },
       :priority => true
     }
 
@@ -93,8 +93,9 @@ module CucumberFactory
         named_records(world)[name] = record
       end
 
-      def parse_named_creation(world, name, raw_model, raw_variant, raw_attributes, raw_boolean_attributes, raw_multiline_attributes = nil)
+      def parse_named_creation(world, double_quote_name, single_quote_name, raw_model, raw_variant, raw_attributes, raw_boolean_attributes, raw_multiline_attributes = nil)
         record = parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes, raw_multiline_attributes)
+        name = [double_quote_name, single_quote_name].compact.first
         set_named_record(world, name, record)
       end
 

@@ -190,8 +190,13 @@ Development
 
 There are tests in `spec`. We only accept PRs with tests. To run tests:
 
-- Install Ruby 2.5.3
-- Create a local MySQL database `cucumber_factory_test`
+- Install the Ruby version stated in `.ruby-version`
+- Create a local MySQL/MariaDB database named `cucumber_factory_test`
+```
+$ mysql -u root -p
+> create database cucumber_factory_test;
+```
+
 - Copy `spec/support/database.sample.yml` to `spec/support/database.yml` and enter your local credentials for the test databases
 - Install development dependencies using `bundle install`
 - Run tests with the default symlinked Gemfile using `bundle exec rspec` or explicit with `BUNDLE_GEMFILE=Gemfile.cucumber-x.x bundle exec rspec spec`
