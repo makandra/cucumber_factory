@@ -104,10 +104,15 @@ module CucumberFactory
         model_class = build_strategy.model_class
         attributes = {}
         if raw_attributes.try(:strip).present?
-          raw_attributes.scan(/(?:the |and |with |but |,| )+(.*?) (#{VALUE_SCALAR}|#{VALUE_ARRAY}|#{VALUE_LAST_RECORD})/).each do |fragment|
+          raw_attribute_fragment_regex = /(?:the |and |with |but |,| )+(.*?) (#{VALUE_SCALAR}|#{VALUE_ARRAY}|#{VALUE_LAST_RECORD})/
+          raw_attributes.scan(raw_attribute_fragment_regex).each do |fragment|
             attribute = attribute_name_from_prose(fragment[0])
             value = fragment[1]
             attributes[attribute] = attribute_value(world, model_class, attribute, value)
+          end
+          unused_raw_attributes = raw_attributes.gsub(raw_attribute_fragment_regex, '')
+          if unused_raw_attributes.present?
+            raise ArgumentError, "Unable to parse attributes #{unused_raw_attributes.inspect}."
           end
         end
         if raw_boolean_attributes.try(:strip).present?

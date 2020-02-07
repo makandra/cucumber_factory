@@ -458,4 +458,11 @@ tags: ["foo", "bar"]
     invoke_cucumber_step("'' is a machinist model with the attribute 'foo'")
   end
 
+  it 'should warn if there are unused fragments' do
+    MachinistModel.should_not_receive(:make)
+    lambda { invoke_cucumber_step("there is a machinist model with the attribute NOQUOTES") }.should raise_error(ArgumentError, 'Unable to parse attributes " with the attribute NOQUOTES".')
+    lambda { invoke_cucumber_step("there is a machinist model with the attribute 'foo' and the ") }.should raise_error(ArgumentError, 'Unable to parse attributes " and the ".')
+    lambda { invoke_cucumber_step("there is a machinist model with the attribute 'foo'. the other_attribute 'bar' and the third attribute 'baz'") }.should raise_error(ArgumentError, 'Unable to parse attributes ".".')
+  end
+
 end
