@@ -15,6 +15,24 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 -
 
+## 2.0.0 - 2020-02-10
+
+### Breaking changes
+
+- CucumberFactory now raises an `ArgumentError` if some parts of a matched step were not used. For example, while this step was accepted in recent versions, it will now complain with the message `Unable to parse attributes " and the ".`:
+  ```
+  Given there is a user with the attribute 'foo' and the
+  ```
+
+
+### Compatible changes
+
+- Single quoted attribute values and model names are now supported. Example:
+
+  ```
+  Given 'jack' is a user with the first name 'Jack'
+  ```
+
 ## 1.15.1 - 2019-05-30
 
 ### Compatible changes
