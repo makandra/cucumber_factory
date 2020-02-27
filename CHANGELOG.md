@@ -15,6 +15,16 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 -
 
+## 2.0.1 - 2020-02-27
+
+### Compatible changes
+
+- Fix a bug that prevented created records to be named when using multiline attribute assignments
+  ```
+  Given "Bob" is a user with these attributes:
+    | email | foo@bar.com     |
+  ```
+
 ## 2.0.0 - 2020-02-10
 
 ### Breaking changes
