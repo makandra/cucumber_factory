@@ -65,7 +65,7 @@ Given there is a movie with these attributes:
 Setting associations
 --------------------
 
-You can set `belongs_to` associations by referring to the last created record of as `above`:
+You can set `belongs_to` and `transient` associations by referring to the last created record of as `above`:
 
 ```cucumber
 Given there is a movie with the title "Before Sunrise"

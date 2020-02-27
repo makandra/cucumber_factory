@@ -35,4 +35,10 @@ Gemika::Database.new.rewrite_schema! do
   create_table :actors do |t|
   end
 
+  create_table :job_offers do |t|
+  end
+
+  create_table :operas do |t|
+  end
+
 end

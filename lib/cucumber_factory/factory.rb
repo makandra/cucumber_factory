@@ -100,7 +100,7 @@ module CucumberFactory
       end
 
       def parse_creation(world, raw_model, raw_variant, raw_attributes, raw_boolean_attributes, raw_multiline_attributes = nil)
-        build_strategy = BuildStrategy.from_prose(raw_model, raw_variant)
+        build_strategy, transient_attributes = BuildStrategy.from_prose(raw_model, raw_variant)
         model_class = build_strategy.model_class
         attributes = {}
         if raw_attributes.try(:strip).present?
@@ -108,7 +108,7 @@ module CucumberFactory
           raw_attributes.scan(raw_attribute_fragment_regex).each do |fragment|
             attribute = attribute_name_from_prose(fragment[0])
             value = fragment[1]
-            attributes[attribute] = attribute_value(world, model_class, attribute, value)
+            attributes[attribute] = attribute_value(world, model_class, transient_attributes, attribute, value)
           end
           unused_raw_attributes = raw_attributes.gsub(raw_attribute_fragment_regex, '')
           if unused_raw_attributes.present?
@@ -129,14 +129,14 @@ module CucumberFactory
               raw_attribute, value = fragment.split(': ')
               attribute = attribute_name_from_prose(raw_attribute)
               value = "\"#{value}\"" unless matches_fully?(value, VALUE_ARRAY)
-              attributes[attribute] = attribute_value(world, model_class, attribute, value)
+              attributes[attribute] = attribute_value(world, model_class, transient_attributes, attribute, value)
             end
           # DataTable e.g. in raw [["first name", "Jane"], ["last name", "Jenny"]]
           else
             raw_multiline_attributes.raw.each do |raw_attribute, value|
               attribute = attribute_name_from_prose(raw_attribute)
               value = "\"#{value}\"" unless matches_fully?(value, VALUE_ARRAY)
-              attributes[attribute] = attribute_value(world, model_class, attribute, value)
+              attributes[attribute] = attribute_value(world, model_class, transient_attributes, attribute, value)
             end
           end
         end
@@ -145,15 +145,15 @@ module CucumberFactory
         record
       end
 
-      def attribute_value(world, model_class, attribute, value)
-        association = model_class.respond_to?(:reflect_on_association) ? model_class.reflect_on_association(attribute) : nil
+      def attribute_value(world, model_class, transient_attributes, attribute, value)
+        association_class = resolve_association_class(attribute, model_class, transient_attributes)
 
         if matches_fully?(value, VALUE_ARRAY)
           elements_str = unquote(value)
-          value = elements_str.scan(VALUE_SCALAR).map { |v| attribute_value(world, model_class, attribute, v) }
-        elsif association.present?
+          value = elements_str.scan(VALUE_SCALAR).map { |v| attribute_value(world, model_class, transient_attributes, attribute, v) }
+        elsif association_class.present?
           if matches_fully?(value, VALUE_LAST_RECORD)
-            value = CucumberFactory::Switcher.find_last(association.klass) or raise Error, "There is no last #{attribute}"
+            value = CucumberFactory::Switcher.find_last(association_class) or raise Error, "There is no last #{attribute}"
           elsif matches_fully?(value, VALUE_STRING)
             value = unquote(value)
             value = get_named_record(world, value) || transform_value(world, value)
@@ -167,6 +167,19 @@ module CucumberFactory
           value = resolve_scalar_value(world, model_class, attribute, value)
         end
         value
+      end
+
+      def resolve_association_class(attribute, model_class, transient_attributes)
+        return unless model_class.respond_to?(:reflect_on_association)
+
+        klass = if model_class.reflect_on_association(attribute)
+          model_class.reflect_on_association(attribute).klass
+        elsif transient_attributes.include?(attribute.to_sym)
+          klass_name = attribute.to_s.camelize
+          klass_name.constantize if Object.const_defined?(klass_name)
+        else
+          nil
+        end
       end
 
       def resolve_scalar_value(world, model_class, attribute, value)

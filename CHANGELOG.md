@@ -19,6 +19,16 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 - Removed development and test support for Ruby 1.8. Closes #32.
 
+## 2.1.0 - 2020-03-09
+
+### Compatible changes
+
+- Allow associations to be set for [transient attributes](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#transient-attributes) if they are named after the model. For example, when there is a `Role` model and the`user` factory has a transient attribute `role`, the following steps are now valid:
+  ```
+  Given there is a role
+    And there is a user with the role above
+  ```
+
 ## 2.0.1 - 2020-02-27
 
 ### Compatible changes

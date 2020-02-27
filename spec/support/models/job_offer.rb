@@ -1,4 +1,2 @@
-class JobOffer
-  def initialize(options)
-  end
+class JobOffer < ActiveRecord::Base
 end

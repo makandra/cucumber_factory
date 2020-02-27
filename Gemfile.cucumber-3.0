@@ -12,5 +12,8 @@ gem 'rake'
 gem 'database_cleaner'
 gem 'gemika'
 
+# Test dependencies
+gem 'factory_bot'
+
 # Gem under test
 gem 'cucumber_factory', :path => '.'

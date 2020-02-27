@@ -1,4 +1,3 @@
-class Opera
-  def initialize(options)
-  end
+class Opera < ActiveRecord::Base
+
 end
