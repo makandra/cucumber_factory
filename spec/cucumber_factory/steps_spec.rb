@@ -400,6 +400,17 @@ tags: ["foo", "bar"]
     obj.attributes[:tags].should == ['foo', 'bar']
   end
 
+  it 'should allow named records when setting attributes via doc string' do
+    invoke_cucumber_step('"Some Prequel" is a movie with these attributes:', <<-DOC_STRING)
+title: Before Sunrise
+    DOC_STRING
+    invoke_cucumber_step('there is a movie with the title "Limitless"')
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Some Prequel"')
+    movie = Movie.find_by_title!('Before Sunset')
+    prequel = Movie.find_by_title!('Before Sunrise')
+    movie.prequel.should == prequel
+  end
+
   it "should allow to set attributes via data table" do
     user = User.new
     User.stub(:new => user)
@@ -432,6 +443,17 @@ tags: ["foo", "bar"]
 
     obj = PlainRubyClass.last
     obj.attributes[:tags].should == ['foo', 'bar']
+  end
+
+  it 'should allow named records when setting attributes via data table' do
+    invoke_cucumber_step('"Some Prequel" is a movie with these attributes:', nil, <<-DATA_TABLE)
+| title | Before Sunrise |
+    DATA_TABLE
+    invoke_cucumber_step('there is a movie with the title "Limitless"')
+    invoke_cucumber_step('there is a movie with the title "Before Sunset" and the prequel "Some Prequel"')
+    movie = Movie.find_by_title!('Before Sunset')
+    prequel = Movie.find_by_title!('Before Sunrise')
+    movie.prequel.should == prequel
   end
 
   it "should allow single quote for attribute values" do

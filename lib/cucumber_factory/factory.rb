@@ -41,7 +41,7 @@ module CucumberFactory
 
     NAMED_CREATION_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES = {
       :kind => :Given,
-      :pattern => /^"#{NAMED_RECORD_PATTERN}#{ATTRIBUTES_PATTERN}#{TEXT_ATTRIBUTES_PATTERN}?$/,
+      :pattern => /^#{NAMED_RECORD_PATTERN}#{ATTRIBUTES_PATTERN}#{TEXT_ATTRIBUTES_PATTERN}?$/,
       :block => lambda { |a1, a2, a3, a4, a5, a6, a7| CucumberFactory::Factory.send(:parse_named_creation, self, a1, a2, a3, a4, a5, a6, a7) },
       :priority => true
     }
