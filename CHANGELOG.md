@@ -13,11 +13,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
-## 2.0.2 - 2020-03-26
+-
 
-### Compatible changes
-
-- Removed development and test support for Ruby 1.8. Closes #32.
 
 ## 2.1.0 - 2020-03-09
 
@@ -28,6 +25,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
   Given there is a role
     And there is a user with the role above
   ```
+
+## 2.0.2 - 2020-03-26
+
+### Compatible changes
+
+- Removed development and test support for Ruby 1.8. Closes #32.
 
 ## 2.0.1 - 2020-02-27
 
