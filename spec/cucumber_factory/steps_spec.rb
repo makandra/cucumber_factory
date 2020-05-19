@@ -356,6 +356,18 @@ title: Before Sunrise
       prequel = Movie.find_by_title!('Before Sunrise')
       movie.prequel.should == prequel
     end
+
+    it 'supports named associations with polymorphic associations' do
+      invoke_cucumber_step('"my opera" is an opera')
+      invoke_cucumber_step('there is a movie with the premiere site "my opera"')
+    end
+
+    it 'does not support last record references with polymorphic associations as the target class cannot be guessed' do
+      invoke_cucumber_step('there is an opera')
+      expect {
+        invoke_cucumber_step('there is a movie with the premiere site above')
+      }.to raise_error(CucumberFactory::Factory::Error, 'Cannot set last Movie#premiere_site for polymorphic associations')
+    end
   end
 
   context 'without FactoryBot' do

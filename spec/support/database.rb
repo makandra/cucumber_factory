@@ -7,6 +7,8 @@ Gemika::Database.new.rewrite_schema! do
     t.integer :reviewer_id
     t.string :uuid_reviewer_id
     t.integer :box_office_result
+    t.string :premiere_site_type
+    t.bigint :premiere_site_id
   end
 
   create_table :users do |t|

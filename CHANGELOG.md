@@ -13,7 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
--
+- Fix the assignment of polymorphic associations. Cucumber 2.1.0 introduced a regression which is being addressed with this patched.
 
 
 ## 2.1.0 - 2020-03-09
