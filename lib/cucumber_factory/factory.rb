@@ -175,14 +175,17 @@ module CucumberFactory
         return unless model_class.respond_to?(:reflect_on_association)
 
         association = model_class.reflect_on_association(attribute)
-        associated = true
         association_class = nil
 
         if association
           association_class = association.klass unless association.polymorphic?
+          associated = true
         elsif transient_attributes.include?(attribute.to_sym)
           klass_name = attribute.to_s.camelize
-          association_class = klass_name.constantize if Object.const_defined?(klass_name)
+          if Object.const_defined?(klass_name)
+            association_class = klass_name.constantize
+            associated = true
+          end
         else
           associated = false
         end

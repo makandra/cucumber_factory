@@ -25,7 +25,17 @@ FactoryBot.define do
     end
   end
 
-  factory :movie, :class => Movie
+  factory :movie, :class => Movie do
+    transient do
+      user { nil }
+      user_id { nil }
+    end
+
+    after(:build) do |movie, evaluator|
+      movie.reviewer = evaluator.user if evaluator.user
+      movie.reviewer_id = evaluator.user_id if evaluator.user_id
+    end
+  end
   factory :opera, :class => Opera
   factory :payment, :class => Payment
   factory :uuid_user, :class => UuidUser

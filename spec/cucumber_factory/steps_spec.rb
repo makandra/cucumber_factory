@@ -368,6 +368,23 @@ title: Before Sunrise
         invoke_cucumber_step('there is a movie with the premiere site above')
       }.to raise_error(CucumberFactory::Factory::Error, 'Cannot set last Movie#premiere_site for polymorphic associations')
     end
+
+    it 'does not overwrite references when associating new records with an existing reference' do
+      invoke_cucumber_step('"reviewer" is a user with the id "1"')
+      movie1 = invoke_cucumber_step('there is a movie with the reviewer "reviewer" and the id "2"')
+      movie2 = invoke_cucumber_step('there is a movie with the reviewer "reviewer" and the id "3"')
+
+      expect(movie1.reviewer_id).to eq(1)
+      expect(movie2.reviewer_id).to eq(1)
+    end
+
+    it 'does NOT overwrite references when associating new records with an existing reference (BUGFIX)' do
+      movie1 = invoke_cucumber_step('there is a movie with the id "123" and the user id "456"')
+      movie2 = invoke_cucumber_step('there is a movie with the user id "456"')
+
+      expect(movie1.reviewer_id).to eq(456)
+      expect(movie2.reviewer_id).to eq(456)
+    end
   end
 
   context 'without FactoryBot' do
