@@ -11,6 +11,7 @@ module CucumberFactory
         factory = factory_bot_factory(model_prose, variants)
 
         if factory
+          factory.compile # Required to load inherited traits!
           strategy = factory_bot_strategy(factory, model_prose, variants)
           transient_attributes = factory_bot_transient_attributes(factory, variants)
         else

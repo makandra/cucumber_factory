@@ -35,6 +35,10 @@ FactoryBot.define do
       movie.reviewer = evaluator.user if evaluator.user
       movie.reviewer_id = evaluator.user_id if evaluator.user_id
     end
+
+    trait :parent_movie_trait
+
+    factory :subgenre_movie, traits: [:parent_movie_trait]
   end
   factory :opera, :class => Opera
   factory :payment, :class => Payment

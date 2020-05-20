@@ -369,21 +369,30 @@ title: Before Sunrise
       }.to raise_error(CucumberFactory::Factory::Error, 'Cannot set last Movie#premiere_site for polymorphic associations')
     end
 
-    it 'does not overwrite references when associating new records with an existing reference' do
-      invoke_cucumber_step('"reviewer" is a user with the id "1"')
-      movie1 = invoke_cucumber_step('there is a movie with the reviewer "reviewer" and the id "2"')
-      movie2 = invoke_cucumber_step('there is a movie with the reviewer "reviewer" and the id "3"')
-
-      expect(movie1.reviewer_id).to eq(1)
-      expect(movie2.reviewer_id).to eq(1)
+    it 'works with nested factories (BUGFIX)' do
+      invoke_cucumber_step('there is a subgenre movie')
     end
 
-    it 'does NOT overwrite references when associating new records with an existing reference (BUGFIX)' do
-      movie1 = invoke_cucumber_step('there is a movie with the id "123" and the user id "456"')
-      movie2 = invoke_cucumber_step('there is a movie with the user id "456"')
+    describe 'references to named records are tracked correctly' do
+      # CucumberFactory keeps track of all created records by their attributes.
+      # For example, if you create a user with the name "Peter" you can reference him later on as "Peter".
 
-      expect(movie1.reviewer_id).to eq(456)
-      expect(movie2.reviewer_id).to eq(456)
+      it 'does not overwrite existing references when associating new records with another reference (BUGFIX)' do
+        invoke_cucumber_step('"reviewer" is a user with the id "1"')
+        movie1 = invoke_cucumber_step('there is a movie with the reviewer "reviewer" and the id "2"') # <- should not overwrite the 'reviewer' reference
+        movie2 = invoke_cucumber_step('there is a movie with the reviewer "reviewer" and the id "3"')
+
+        expect(movie1.reviewer_id).to eq(1)
+        expect(movie2.reviewer_id).to eq(1)
+      end
+
+      it 'does not set new references when setting primary keys of an association (BUGFIX)' do
+        movie1 = invoke_cucumber_step('there is a movie with the id "123" and the user id "456"')  # <- should not set a '456' reference
+        movie2 = invoke_cucumber_step('there is a movie with the user id "456"')
+
+        expect(movie1.reviewer_id).to eq(456)
+        expect(movie2.reviewer_id).to eq(456)
+      end
     end
   end
 
