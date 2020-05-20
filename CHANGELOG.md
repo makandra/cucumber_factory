@@ -13,8 +13,15 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
-- Fix the assignment of polymorphic associations. Cucumber 2.1.0 introduced a regression which is being addressed with this patched.
+-
 
+## 2.1.1 - 2020-05-20
+
+### Compatible changes
+
+- Cucumber 2.1.0 introduced some regressions which are being addressed with this patch:
+    - Fix the assignment of polymorphic associations.
+    - Restore the support for inherited traits within nested factories.
 
 ## 2.1.0 - 2020-03-09
 
