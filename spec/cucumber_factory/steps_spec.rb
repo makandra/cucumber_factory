@@ -447,6 +447,13 @@ title: Before Sunrise
       obj.attributes[:total].to_s.should == "45.6"
     end
 
+    it "should allow to set file attributes with the FILE syntax" do
+      invoke_cucumber_step('there is a plain Ruby class with the file <FILE:spec/assets/file.txt>')
+      obj = PlainRubyClass.last
+      obj.attributes[:file].should be_a(File)
+      obj.attributes[:file].read.should == "This is a test file.\n"
+    end
+
     it "should allow set an array of strings with square brackets" do
       invoke_cucumber_step('there is a plain Ruby class with the tags ["foo", "bar"] and the list ["bam", "baz"]')
       obj = PlainRubyClass.last
