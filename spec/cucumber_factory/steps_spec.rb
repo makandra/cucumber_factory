@@ -388,6 +388,50 @@ title: Before Sunrise
       }.to raise_error(CucumberFactory::Factory::Error, 'Cannot set last Movie#premiere_site for polymorphic associations')
     end
 
+    it 'supports carrierwave uploaders' do
+      invoke_cucumber_step('there is a payment with the attachment file:"spec/assets/file.txt"')
+      payment = Payment.last
+      expect(payment.attachment.file.read).to eq "This is a test file.\n"
+    end
+
+    it 'supports single quote for carrierwave uploaders' do
+      invoke_cucumber_step("there is a payment with the attachment file:'spec/assets/file.txt'")
+      payment = Payment.last
+      expect(payment.attachment.file.read).to eq "This is a test file.\n"
+    end
+
+    it 'is able to read symlinked files' do
+      invoke_cucumber_step("there is a payment with the attachment file:'spec/assets/symlink.txt'")
+      payment = Payment.last
+      expect(payment.attachment.file.read).to eq "This is a test file.\n"
+    end
+
+    it 'supports table syntax for carrierwave uploaders' do
+      invoke_cucumber_step('there is a payment with these attributes:', nil, <<-DATA_TABLE)
+| attachment | file:"spec/assets/file.txt" |
+      DATA_TABLE
+      payment = Payment.last
+      expect(payment.attachment.file.read).to eq "This is a test file.\n"
+    end
+
+    it 'supports doc string syntax for carrierwave uploaders' do
+      invoke_cucumber_step('there is a payment with these attributes:', <<-DOC_STRING)
+attachment: file:"spec/assets/file.txt"
+      DOC_STRING
+      payment = Payment.last
+      payment.save!
+      expect(payment.attachment.file.read).to eq "This is a test file.\n"
+    end
+
+    it 'allows updating a carrierwave attribute' do
+      invoke_cucumber_step('there is a payment with the attachment file:"spec/assets/file.txt"')
+      payment = Payment.last
+      expect(payment.attachment.file.read).to eq "This is a test file.\n"
+      invoke_cucumber_step('the payment above has the attachment file:"spec/assets/file2.txt"')
+      payment.reload
+      expect(payment.attachment.file.read).to eq "This is the second test file.\n"
+    end
+
     it 'works with nested factories (BUGFIX)' do
       invoke_cucumber_step('there is a subgenre movie')
     end
@@ -445,6 +489,13 @@ title: Before Sunrise
       obj.attributes[:amount].to_s.should == "1.23"
       obj.attributes[:total].should be_a(BigDecimal)
       obj.attributes[:total].to_s.should == "45.6"
+    end
+
+    it "should allow to set file attributes with the file:'path' syntax" do
+      invoke_cucumber_step('there is a plain Ruby class with the file file:"spec/assets/file.txt"')
+      obj = PlainRubyClass.last
+      obj.attributes[:file].should be_a(File)
+      obj.attributes[:file].read.should == "This is a test file.\n"
     end
 
     it "should allow set an array of strings with square brackets" do

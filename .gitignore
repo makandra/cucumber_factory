@@ -6,3 +6,4 @@ pkg
 .rvmrc
 log/*.log
 spec/support/database.yml
+uploads/

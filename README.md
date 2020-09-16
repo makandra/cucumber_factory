@@ -151,7 +151,16 @@ Given there is a movie with the tags ["comedy", "drama" and "action"]
 ```
 
 
+Setting file attributes
+-----------------------
 
+You can set an attribute to a file object with the following syntax:
+
+```cucumber
+Given there is a movie with the image file:'path/to/image.jpg'
+```
+
+All paths are relative to the project root, absolute paths are not supported. Please note that file attributes must follow the syntax `file:"PATH"`, both single and double quotes are allowed.
 
 Using named factories and traits
 --------------------------------

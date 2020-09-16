@@ -3,9 +3,12 @@ $: << File.join(File.dirname(__FILE__), "/../../lib" )
 require 'cucumber_factory'
 require 'gemika'
 require 'factory_bot'
+require 'carrierwave'
+require 'carrierwave/orm/activerecord'
 
 ActiveRecord::Base.default_timezone = :local
 
+Dir["#{File.dirname(__FILE__)}/support/uploaders/*.rb"].sort.each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/support/models/*.rb"].sort.each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].sort.each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/shared_examples/**/*.rb"].sort.each {|f| require f}

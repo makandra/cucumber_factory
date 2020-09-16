@@ -16,10 +16,11 @@ module CucumberFactory
     VALUE_INTEGER = /\d+/
     VALUE_DECIMAL = /[\d\.]+/
     VALUE_STRING = /"[^"]*"|'[^']*'/
+    VALUE_FILE = /file:#{VALUE_STRING}/
     VALUE_ARRAY = /\[[^\]]*\]/
     VALUE_LAST_RECORD = /\babove\b/
 
-    VALUE_SCALAR = /#{VALUE_STRING}|#{VALUE_DECIMAL}|#{VALUE_INTEGER}/
+    VALUE_SCALAR = /#{VALUE_STRING}|#{VALUE_DECIMAL}|#{VALUE_INTEGER}|#{VALUE_FILE}/
 
     CLEAR_NAMED_RECORDS_STEP_DESCRIPTOR = {
       :kind => :Before,
@@ -160,16 +161,16 @@ module CucumberFactory
           # DocString e.g. "first name: Jane\nlast name: Jenny\n"
           if raw_multiline_attributes.is_a?(String)
             raw_multiline_attributes.split("\n").each do |fragment|
-              raw_attribute, value = fragment.split(': ')
+              raw_attribute, value = fragment.split(': ', 2)
               attribute = attribute_name_from_prose(raw_attribute)
-              value = "\"#{value}\"" unless matches_fully?(value, VALUE_ARRAY)
+              value = "\"#{value}\"" unless matches_fully?(value, /#{VALUE_ARRAY}|#{VALUE_FILE}/)
               attributes[attribute] = attribute_value(world, model_class, transient_attributes, attribute, value)
             end
           # DataTable e.g. in raw [["first name", "Jane"], ["last name", "Jenny"]]
           else
             raw_multiline_attributes.raw.each do |raw_attribute, value|
               attribute = attribute_name_from_prose(raw_attribute)
-              value = "\"#{value}\"" unless matches_fully?(value, VALUE_ARRAY)
+              value = "\"#{value}\"" unless matches_fully?(value, /#{VALUE_ARRAY}|#{VALUE_FILE}/)
               attributes[attribute] = attribute_value(world, model_class, transient_attributes, attribute, value)
             end
           end
@@ -236,6 +237,9 @@ module CucumberFactory
           value = value.to_i
         elsif matches_fully?(value, VALUE_DECIMAL)
           value = BigDecimal(value)
+        elsif matches_fully?(value, VALUE_FILE)
+          path = File.path("./#{file_value_to_path(value)}")
+          value = File.new(path)
         else
           raise Error, "Cannot set attribute #{model_class}##{attribute} to #{value}."
         end
@@ -243,11 +247,20 @@ module CucumberFactory
       end
 
       def unquote(string)
+        # This method removes quotes or brackets from the start and end from a string
+        # Examples: 'single' => single, "double" => double, [1, 2, 3] => 1, 2, 3
         string[1, string.length - 2]
       end
 
+      def file_value_to_path(string)
+        # file paths are marked with a special keyword and enclosed with quotes.
+        # Example: file:"/path/image.png"
+        # This will extract the path (/path/image.png) from the text fragment above
+        unquote string.sub(/\Afile:/, '')
+      end
+
       def full_regexp(partial_regexp)
-        Regexp.new("\\A" + partial_regexp.source + "\\z", partial_regexp.options)
+        Regexp.new('\\A(?:' + partial_regexp.source + ')\\z', partial_regexp.options)
       end
 
       def matches_fully?(string, partial_regexp)
@@ -267,7 +280,7 @@ module CucumberFactory
       end
 
       def attribute_name_from_prose(prose)
-        prose.downcase.gsub(" ", "_").to_sym
+        prose.downcase.gsub(' ', '_').to_sym
       end
 
       def remember_record_names(world, record, attributes)

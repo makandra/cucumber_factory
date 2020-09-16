@@ -13,7 +13,11 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
--
+- Added a step to add file objects to a model:
+  ```cucumber
+  Given there is a user with the avatar file:"path/to/avatar.jpg"
+  ```
+  Both single and double quotes are supported.
 
 ## 2.2.0 - 2020-09-23
 
