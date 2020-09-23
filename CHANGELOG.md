@@ -13,6 +13,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
+-
+
+## 2.2.0 - 2020-09-23
+
+### Compatible changes
+
 - A step was added that allows modifying existing records with a similar syntax to creating new records:
   ```cucumber
   (Given "Bob" is a user)
