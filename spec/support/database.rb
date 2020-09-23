@@ -32,6 +32,7 @@ Gemika::Database.new.rewrite_schema! do
   create_table :payments do |t|
     t.text :comment
     t.integer :amount
+    t.string :attachment
   end
 
   create_table :actors do |t|
