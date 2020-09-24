@@ -238,7 +238,7 @@ module CucumberFactory
         elsif matches_fully?(value, VALUE_DECIMAL)
           value = BigDecimal(value)
         elsif matches_fully?(value, VALUE_FILE)
-          path = File.realpath("./#{file_value_to_path(value)}")
+          path = File.path("./#{file_value_to_path(value)}")
           value = File.new(path)
         else
           raise Error, "Cannot set attribute #{model_class}##{attribute} to #{value}."

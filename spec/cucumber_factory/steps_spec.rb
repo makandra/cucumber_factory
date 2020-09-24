@@ -400,6 +400,12 @@ title: Before Sunrise
       expect(payment.attachment.file.read).to eq "This is a test file.\n"
     end
 
+    it 'is able to read symlinked files' do
+      invoke_cucumber_step("there is a payment with the attachment file:'spec/assets/symlink.txt'")
+      payment = Payment.last
+      expect(payment.attachment.file.read).to eq "This is a test file.\n"
+    end
+
     it 'supports table syntax for carrierwave uploaders' do
       invoke_cucumber_step('there is a payment with these attributes:', nil, <<-DATA_TABLE)
 | attachment | file:"spec/assets/file.txt" |
