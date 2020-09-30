@@ -88,7 +88,8 @@ module CucumberFactory
         main.instance_eval {
           kind = descriptor[:kind]
           object = send(kind, *[descriptor[:pattern]].compact, &descriptor[:block])
-          object.overridable(:priority => descriptor[:priority] ? 1 : 0) if kind != :Before
+          # cucumber_factory steps get a low priority due to their generic syntax
+          object.overridable(:priority => descriptor[:priority] ? -1 : -2) if kind != :Before
           object
         }
       end
