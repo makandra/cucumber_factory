@@ -4,12 +4,12 @@ module CucumberFactory
 
     ATTRIBUTES_PATTERN = '( with the .+?)?( (?:which|who|that) is .+?)?' # ... with the year 1979 which is science fiction
     TEXT_ATTRIBUTES_PATTERN = ' (?:with|and) these attributes:'
-    UPDATE_ATTR_PATTERN = '(?: (?:has|belongs to)( the .+?))?(?:(?: and| but|,)*( is .+?))?' # ... belongs to the collection "Fantasy" and is trending
+    UPDATE_ATTR_PATTERN = '(?: (?:has|belongs to)( the .+?)|(?: and| but|,)*( is .+?))' # ... belongs to the collection "Fantasy" and is trending
     TEXT_UPDATE_ATTR_PATTERN = '(?: and|,)* has these attributes:'
 
     RECORD_PATTERN = 'there is an? (.+?)( \(.+?\))?' # Given there is a movie (comedy)
     NAMED_RECORD_PATTERN = '(?:"([^\"]*)"|\'([^\']*)\') is an? (.+?)( \(.+?\))?' # Given "LotR" is a movie
-    RECORD_UPDATE_PATTERN = 'the (.+?) (above|".+?"|\'.+?\')' # Given the movie "LotR" ...
+    RECORD_UPDATE_PATTERN = 'the ([^"\',]+?) (above|".+?"|\'.+?\')' # Given the movie "LotR" ...
 
     NAMED_RECORDS_VARIABLE = :'@named_cucumber_factory_records'
 
@@ -45,7 +45,7 @@ module CucumberFactory
 
     UPDATE_STEP_DESCRIPTOR = {
       :kind => :And,
-      :pattern => /^#{RECORD_UPDATE_PATTERN}#{UPDATE_ATTR_PATTERN}$/,
+      :pattern => /^#{RECORD_UPDATE_PATTERN}#{UPDATE_ATTR_PATTERN}+$/,
       :block => lambda { |a1, a2, a3, a4| CucumberFactory::Factory.send(:parse_update, self, a1, a2, a3, a4) }
     }
 
@@ -65,7 +65,7 @@ module CucumberFactory
 
     UPDATE_STEP_DESCRIPTOR_WITH_TEXT_ATTRIBUTES = {
       :kind => :And,
-      :pattern => /^#{RECORD_UPDATE_PATTERN}#{UPDATE_ATTR_PATTERN}#{TEXT_UPDATE_ATTR_PATTERN}$/,
+      :pattern => /^#{RECORD_UPDATE_PATTERN}#{UPDATE_ATTR_PATTERN}*#{TEXT_UPDATE_ATTR_PATTERN}$/,
       :block => lambda { |a1, a2, a3, a4, a5| CucumberFactory::Factory.send(:parse_update, self, a1, a2, a3, a4, a5) },
       :priority => true
     }
