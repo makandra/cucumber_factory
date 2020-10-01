@@ -15,6 +15,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 -
 
+## 2.3.1 - 2020-10-01
+
+### Compatible changes
+
+- Lowered the priority of all steps in this gem to avoid issues with overlapping steps.
+
 ## 2.3.0 - 2020-09-24
 
 ### Compatible changes
