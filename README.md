@@ -222,10 +222,9 @@ Development
 There are tests in `spec`. We only accept PRs with tests. To run tests:
 
 - Install the Ruby version stated in `.ruby-version`
-- Create a local MySQL/MariaDB database named `cucumber_factory_test`
+- Create a local PostgreSQL database:
 ```
-$ mysql -u root -p
-> create database cucumber_factory_test;
+$ sudo -u postgres psql -c 'create database cucumber_factory_test;'
 ```
 
 - Copy `spec/support/database.sample.yml` to `spec/support/database.yml` and enter your local credentials for the test databases

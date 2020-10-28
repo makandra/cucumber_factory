@@ -1,5 +1,6 @@
-postgres:
+postgresql:
   database: cucumber_factory_test
   host: localhost
   username: postgres
   password: postgres
+  port: 5432

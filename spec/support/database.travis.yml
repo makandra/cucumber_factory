@@ -1,4 +1,0 @@
-mysql:
-  database: cucumber_factory_test
-  username: travis
-  password:
