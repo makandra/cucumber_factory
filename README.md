@@ -231,13 +231,13 @@ $ sudo -u postgres psql -c 'create database cucumber_factory_test;'
 - Install development dependencies using `bundle install`
 - Run tests with the default symlinked Gemfile using `bundle exec rspec` or explicit with `BUNDLE_GEMFILE=Gemfile.cucumber-x.x bundle exec rspec spec`
 
-We recommend to test large changes against multiple versions of Ruby and multiple dependency sets. Supported combinations are configured in `.travis.yml`. We provide some rake tasks to help with this:
+We recommend to test large changes against multiple versions of Ruby and multiple dependency sets. Supported combinations are configured in .github/workflows/test.yml. We provide some rake tasks to help with this:
 
 For each ruby version do (you need to change it manually):
 - Install development dependencies using `rake matrix:install`
 - Run tests using `rake matrix:spec`
 
-Note that we have configured Travis CI to automatically run tests in all supported Ruby versions and dependency sets after each push. We will only merge pull requests after a green Travis build.
+Note that we have configured GitHub Actions to automatically run tests in all supported Ruby versions and dependency sets after each push. We will only merge pull requests after a green workflow build.
 
 If you would like to contribute:
 
