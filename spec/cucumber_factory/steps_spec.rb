@@ -175,7 +175,10 @@ describe 'steps provided by cucumber_factory' do
     it "should give created_at precedence over id when saying 'above' if the primary key is not numeric" do
       invoke_cucumber_step('there is a uuid user with the name "Jane" and the id "jane"')
       invoke_cucumber_step('there is a uuid user with the name "John" and the id "john"')
-      UuidUser.find_by_name("John").update_attributes!(:created_at => 1.day.ago)
+
+      uuid_user = UuidUser.find_by_name("John")
+      ActiveRecord::VERSION::MAJOR >= 6 ? uuid_user.update!(:created_at => 1.day.ago) : uuid_user.update_attributes!(:created_at => 1.day.ago)
+
       invoke_cucumber_step('there is a movie with the title "Before Sunset" and the uuid reviewer above')
       before_sunset = Movie.find_by_title!("Before Sunset")
       before_sunset.uuid_reviewer.name.should == "Jane"
@@ -184,7 +187,10 @@ describe 'steps provided by cucumber_factory' do
     it "should ignore created_at if the primary key is numeric" do
       invoke_cucumber_step('there is a user with the name "Jane"')
       invoke_cucumber_step('there is a user with the name "John"')
-      User.find_by_name("John").update_attributes!(:created_at => 1.day.ago)
+
+      user = User.find_by_name("John")
+      ActiveRecord::VERSION::MAJOR >= 6 ? user.update!(:created_at => 1.day.ago) : user.update_attributes!(:created_at => 1.day.ago)
+
       invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer above')
       before_sunset = Movie.find_by_title!("Before Sunset")
       before_sunset.reviewer.name.should == "John"
@@ -198,7 +204,10 @@ describe 'steps provided by cucumber_factory' do
 
     it "should reload an object assigned to a belongs_to before assigning" do
       invoke_cucumber_step('"Jane" is a user who is deleted')
-      User.last.update_attributes(:deleted => false)
+
+      user = User.last
+      ActiveRecord::VERSION::MAJOR >= 6 ? user.update!(:deleted => false) : user.update_attributes!(:deleted => false)
+
       proc { invoke_cucumber_step('there is a movie with the title "Before Sunset" and the reviewer "Jane"') }.should_not raise_error
     end
 
