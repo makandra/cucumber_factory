@@ -15,6 +15,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 -
 
+## 2.4.0 - 2021-03-30
+
+### Compatible changes
+
+- Added support for ActiveRecord >= 6.
+
 ## 2.3.1 - 2020-10-01
 
 ### Compatible changes
