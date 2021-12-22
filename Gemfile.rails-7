@@ -1,0 +1,20 @@
+source 'https://rubygems.org'
+
+# Runtime dependencies
+gem 'cucumber', '~> 5.3.0'
+gem 'activesupport', '~> 7.0.0'
+gem 'activerecord', '~> 7.0.0'
+gem 'pg'
+
+# Development dependencies
+gem 'rspec', '~> 3.0'
+gem 'rake'
+gem 'database_cleaner'
+gem 'gemika'
+
+# Test dependencies
+gem 'factory_bot'
+gem 'carrierwave'
+
+# Gem under test
+gem 'cucumber_factory', :path => '.'

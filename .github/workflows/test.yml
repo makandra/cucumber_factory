@@ -26,6 +26,7 @@ jobs:
           gemfile: Gemfile.cucumber-1.3
         - ruby: 2.2.10
           gemfile: Gemfile.cucumber-2.4
+
         - ruby: 2.5.3
           gemfile: Gemfile.cucumber-1.3
         - ruby: 2.5.3
@@ -34,12 +35,19 @@ jobs:
           gemfile: Gemfile.cucumber-3.0
         - ruby: 2.5.3
           gemfile: Gemfile.cucumber-3.1
+
         - ruby: 2.6.6
           gemfile: Gemfile.cucumber-4.1
+
         - ruby: 2.7.2
           gemfile: Gemfile.cucumber-5.3
+
+        - ruby: 3.0.0
+          gemfile: Gemfile.cucumber-4.1
         - ruby: 3.0.0
           gemfile: Gemfile.cucumber-5.3
+        - ruby: 3.0.0
+          gemfile: Gemfile.rails-7
     env:
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
     steps:
