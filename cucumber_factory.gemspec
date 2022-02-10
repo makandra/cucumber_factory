@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Create records from Cucumber features without writing step definitions.}
   s.description = %q{Cucumber Factory allows you to create ActiveRecord models from your Cucumber features without writing step definitions for each model.}
   s.license = 'MIT'
+  s.metadata = { 'rubygems_mfa_required' => 'true' }
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
