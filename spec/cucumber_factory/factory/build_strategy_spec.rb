@@ -45,4 +45,10 @@ describe CucumberFactory::BuildStrategy do
 
   end
 
+  describe '.class_from_factory' do
+    it 'returns the class associated with a factory_bot factory' do
+      described_class.class_from_factory('film').should == Movie
+    end
+  end
+
 end

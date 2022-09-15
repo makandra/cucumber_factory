@@ -22,6 +22,12 @@ module CucumberFactory
         [strategy, transient_attributes]
       end
 
+      def class_from_factory(model_prose)
+        if (factory = factory_bot_factory(model_prose, []))
+          factory.build_class
+        end
+      end
+
       def parse_model_class(model_prose)
         underscored_model_name(model_prose).camelize.constantize
       end
@@ -40,11 +46,13 @@ module CucumberFactory
       def factory_bot_factory(model_prose, variants)
         return unless factory_bot_class
 
+        factories = factory_bot_class.factories
+
         factory_name = factory_name_from_prose(model_prose)
-        factory = factory_bot_class.factories[factory_name]
+        factory = factories.registered?(factory_name) && factories[factory_name]
 
         if factory.nil? && variants.present?
-          factory = factory_bot_class.factories[variants[0]]
+          factory = factories.registered?(variants[0]) && factories[variants[0]]
         end
 
         factory

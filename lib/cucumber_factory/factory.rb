@@ -207,6 +207,9 @@ module CucumberFactory
           if Object.const_defined?(klass_name)
             association_class = klass_name.constantize
             associated = true
+          elsif (factory_class = CucumberFactory::BuildStrategy.class_from_factory(attribute.to_s))
+            association_class = factory_class
+            associated = true
           end
         else
           associated = false
