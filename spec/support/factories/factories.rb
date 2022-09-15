@@ -16,11 +16,12 @@ FactoryBot.define do
   factory :user, :class => User do
     transient do
       movie { nil }
+      film { nil }
     end
 
     after(:build) do |user, evaluator|
-      if user.reviewed_movies.blank? && evaluator.movie
-        user.reviewed_movies << evaluator.movie
+      if user.reviewed_movies.blank? && (evaluator.movie || evaluator.film)
+        user.reviewed_movies << (evaluator.movie || evaluator.film)
       end
     end
   end
@@ -43,4 +44,5 @@ FactoryBot.define do
   factory :opera, :class => Opera
   factory :payment, :class => Payment
   factory :uuid_user, :class => UuidUser
+  factory :film, :class => Movie
 end

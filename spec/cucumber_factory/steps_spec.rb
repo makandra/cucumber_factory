@@ -304,6 +304,14 @@ describe 'steps provided by cucumber_factory' do
       user.reviewed_movies.first.title.should == 'Sunshine'
     end
 
+    it 'allow associations for transient attributes if they are named like a factory' do
+      invoke_cucumber_step('there is a movie with the title "Sunshine"')
+      invoke_cucumber_step('there is a user with the film "Sunshine"')
+      user = User.last
+      user.reviewed_movies.count.should == 1
+      user.reviewed_movies.first.title.should == 'Sunshine'
+    end
+
     it "should allow to set attributes via doc string" do
       user = User.new
       User.stub(:new => user)
