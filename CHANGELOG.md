@@ -13,6 +13,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
+-
+
+## 2.5.0 - 2022-09-15
+
+### Compatible changes
+
 - Treat transient factory_bot attributes as associations if they are named like a factory.
 
 ## 2.4.1 - 2022-03-16
