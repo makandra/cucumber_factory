@@ -37,11 +37,11 @@ jobs:
         - ruby: 2.7.2
           gemfile: Gemfile.cucumber-5.3
 
-        - ruby: 3.0.0
+        - ruby: 3.2.0
           gemfile: Gemfile.cucumber-4.1
-        - ruby: 3.0.0
+        - ruby: 3.2.0
           gemfile: Gemfile.cucumber-5.3
-        - ruby: 3.0.0
+        - ruby: 3.2.0
           gemfile: Gemfile.rails-7
     env:
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
