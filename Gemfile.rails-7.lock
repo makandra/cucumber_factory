@@ -75,7 +75,7 @@ GEM
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     ffi (1.15.4)
-    gemika (0.8.2)
+    gemika (0.8.3)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.1)

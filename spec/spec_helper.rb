@@ -6,7 +6,12 @@ require 'factory_bot'
 require 'carrierwave'
 require 'carrierwave/orm/activerecord'
 
-ActiveRecord::Base.default_timezone = :local
+if ActiveRecord.respond_to?(:default_timezone=)
+  ActiveRecord.default_timezone = :local
+else
+  # Legacy method that was removed in Rails 7.1:
+  ActiveRecord::Base.default_timezone = :local
+end
 
 Dir["#{File.dirname(__FILE__)}/support/uploaders/*.rb"].sort.each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/support/models/*.rb"].sort.each {|f| require f}
