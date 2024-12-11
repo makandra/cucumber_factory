@@ -1,0 +1,175 @@
+PATH
+  remote: .
+  specs:
+    cucumber_factory (2.5.0)
+      activerecord
+      activesupport
+      cucumber
+      cucumber_priority (>= 0.2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (8.0.0.1)
+      activesupport (= 8.0.0.1)
+    activerecord (8.0.0.1)
+      activemodel (= 8.0.0.1)
+      activesupport (= 8.0.0.1)
+      timeout (>= 0.4.0)
+    activesupport (8.0.0.1)
+      base64
+      benchmark (>= 0.3)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.3.1)
+      connection_pool (>= 2.2.5)
+      drb
+      i18n (>= 1.6, < 2)
+      logger (>= 1.4.2)
+      minitest (>= 5.1)
+      securerandom (>= 0.3)
+      tzinfo (~> 2.0, >= 2.0.5)
+      uri (>= 0.13.1)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
+    base64 (0.2.0)
+    benchmark (0.4.0)
+    bigdecimal (3.1.8)
+    builder (3.3.0)
+    carrierwave (3.0.7)
+      activemodel (>= 6.0.0)
+      activesupport (>= 6.0.0)
+      addressable (~> 2.6)
+      image_processing (~> 1.1)
+      marcel (~> 1.0.0)
+      ssrf_filter (~> 1.0)
+    concurrent-ruby (1.3.4)
+    connection_pool (2.4.1)
+    cucumber (5.3.0)
+      builder (~> 3.2, >= 3.2.4)
+      cucumber-core (~> 8.0, >= 8.0.1)
+      cucumber-create-meta (~> 2.0, >= 2.0.2)
+      cucumber-cucumber-expressions (~> 10.3, >= 10.3.0)
+      cucumber-gherkin (~> 15.0, >= 15.0.2)
+      cucumber-html-formatter (~> 9.0, >= 9.0.0)
+      cucumber-messages (~> 13.1, >= 13.1.0)
+      cucumber-wire (~> 4.0, >= 4.0.1)
+      diff-lcs (~> 1.4, >= 1.4.4)
+      multi_test (~> 0.1, >= 0.1.2)
+      sys-uname (~> 1.2, >= 1.2.1)
+    cucumber-core (8.0.1)
+      cucumber-gherkin (~> 15.0, >= 15.0.2)
+      cucumber-messages (~> 13.0, >= 13.0.1)
+      cucumber-tag-expressions (~> 2.0, >= 2.0.4)
+    cucumber-create-meta (2.0.4)
+      cucumber-messages (~> 13.1, >= 13.1.0)
+      sys-uname (~> 1.2, >= 1.2.1)
+    cucumber-cucumber-expressions (10.3.0)
+    cucumber-gherkin (15.0.2)
+      cucumber-messages (~> 13.0, >= 13.0.1)
+    cucumber-html-formatter (9.0.0)
+      cucumber-messages (~> 13.0, >= 13.0.1)
+    cucumber-messages (13.2.1)
+      protobuf-cucumber (~> 3.10, >= 3.10.8)
+    cucumber-tag-expressions (2.0.4)
+    cucumber-wire (4.0.1)
+      cucumber-core (~> 8.0, >= 8.0.1)
+      cucumber-cucumber-expressions (~> 10.3, >= 10.3.0)
+      cucumber-messages (~> 13.0, >= 13.0.1)
+    cucumber_priority (0.3.3)
+      cucumber
+    database_cleaner (2.1.0)
+      database_cleaner-active_record (>= 2, < 3)
+    database_cleaner-active_record (2.2.0)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
+    diff-lcs (1.5.1)
+    drb (2.2.1)
+    factory_bot (6.5.0)
+      activesupport (>= 5.0.0)
+    ffi (1.17.0)
+    ffi (1.17.0-aarch64-linux-gnu)
+    ffi (1.17.0-aarch64-linux-musl)
+    ffi (1.17.0-arm-linux-gnu)
+    ffi (1.17.0-arm-linux-musl)
+    ffi (1.17.0-arm64-darwin)
+    ffi (1.17.0-x86-linux-gnu)
+    ffi (1.17.0-x86-linux-musl)
+    ffi (1.17.0-x86_64-darwin)
+    ffi (1.17.0-x86_64-linux-gnu)
+    ffi (1.17.0-x86_64-linux-musl)
+    gemika (0.8.3)
+    i18n (1.14.6)
+      concurrent-ruby (~> 1.0)
+    image_processing (1.13.0)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
+    logger (1.6.2)
+    marcel (1.0.4)
+    middleware (0.1.0)
+    mini_magick (4.13.2)
+    minitest (5.25.4)
+    multi_test (0.1.2)
+    pg (1.5.9)
+    protobuf-cucumber (3.10.8)
+      activesupport (>= 3.2)
+      middleware
+      thor
+      thread_safe
+    public_suffix (6.0.1)
+    rake (13.2.1)
+    rspec (3.13.0)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.2)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.3)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.2)
+    ruby-vips (2.2.2)
+      ffi (~> 1.12)
+      logger
+    securerandom (0.4.0)
+    ssrf_filter (1.2.0)
+    sys-uname (1.3.1)
+      ffi (~> 1.1)
+    thor (1.3.2)
+    thread_safe (0.3.6)
+    timeout (0.4.2)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
+    uri (1.0.2)
+
+PLATFORMS
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux-gnu
+  arm-linux-musl
+  arm64-darwin
+  ruby
+  x86-linux-gnu
+  x86-linux-musl
+  x86_64-darwin
+  x86_64-linux-gnu
+  x86_64-linux-musl
+
+DEPENDENCIES
+  activerecord (~> 8.0.0)
+  activesupport (~> 8.0.0)
+  carrierwave
+  cucumber (~> 5.3.0)
+  cucumber_factory!
+  database_cleaner
+  factory_bot
+  gemika (>= 0.8.1)
+  pg (> 1.2.3)
+  rake (> 10.0)
+  rspec (~> 3.0)
+
+BUNDLED WITH
+   2.5.22
