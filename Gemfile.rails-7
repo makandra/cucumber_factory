@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 # Former standard gems, see https://stdgems.org/
-#gem 'mutex_m' # Bundled gem since Ruby 3.4
-#gem 'bigdecimal' # Bundled gem since Ruby 3.4
-#gem 'base64' # Bundled gem since Ruby 3.4
+gem 'bigdecimal' # Bundled gem since Ruby 3.4
+gem 'mutex_m' # Bundled gem since Ruby 3.4
+gem 'base64' # Bundled gem since Ruby 3.4
 
 # Runtime dependencies
 gem 'cucumber', '~> 5.3.0'
