@@ -45,9 +45,9 @@ jobs:
           gemfile: Gemfile.rails-7
         - ruby: 3.2.0
           gemfile: Gemfile.rails-8
-        - ruby: 3.3.6
+        - ruby: 3.4.1
           gemfile: Gemfile.rails-7
-        - ruby: 3.3.6
+        - ruby: 3.4.1
           gemfile: Gemfile.rails-8
 
     env:

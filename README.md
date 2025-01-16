@@ -254,7 +254,7 @@ For each ruby version do (you need to change it manually):
 - Run tests using `rake matrix:spec`
 - Shorthand:
   ```sh
-  for version in "2.5.3" "2.6.6" "2.7.2" "3.2.0" "3.3.6"; do rbenv shell $version && bundle install && bundle exec rake matrix:install && bundle exec rake matrix:spec; done
+  for version in "2.5.3" "2.6.6" "2.7.2" "3.2.0" "3.4.1"; do rbenv shell $version && bundle install && bundle exec rake matrix:install && bundle exec rake matrix:spec; done
   ```
 
 Note that we have configured GitHub Actions to automatically run tests in all supported Ruby versions and dependency sets after each push. We will only merge pull requests after a green workflow build.
