@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Runtime dependencies
-gem 'cucumber', '~> 5.3.0'
+gem 'cucumber', '~> 9.2.1'
 gem 'activesupport', '~> 8.0.0'
 gem 'activerecord', '~> 8.0.0'
 gem 'pg', '> 1.2.3'

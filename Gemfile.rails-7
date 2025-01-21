@@ -4,9 +4,10 @@ source 'https://rubygems.org'
 gem 'bigdecimal' # Bundled gem since Ruby 3.4
 gem 'mutex_m' # Bundled gem since Ruby 3.4
 gem 'base64' # Bundled gem since Ruby 3.4
+gem 'logger' # Default gem since Ruby 3.4
 
 # Runtime dependencies
-gem 'cucumber', '~> 5.3.0'
+gem 'cucumber', '~> 9.2.1'
 gem 'activesupport', '~> 7.0.1'
 gem 'activerecord', '~> 7.0.1'
 gem 'pg', '> 1.2.3'

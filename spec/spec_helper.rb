@@ -1,5 +1,6 @@
 $: << File.join(File.dirname(__FILE__), "/../../lib" )
 
+require 'logger'
 require 'cucumber_factory'
 require 'gemika'
 require 'factory_bot'
