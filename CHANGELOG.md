@@ -13,6 +13,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
+-
+
+## 2.6.0 - 2025-01-21
+
+### Compatible changes
+
 - Add Support for Ruby 3.4
 - This requires Cucumber 9+
 
