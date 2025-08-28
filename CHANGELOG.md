@@ -13,7 +13,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Compatible changes
 
--
+
+## 2.7.0 - 2025-08-28
+
+### Compatible changes
+
+- Add Support for Cucumber >= 10
 
 ## 2.6.0 - 2025-01-21
 
