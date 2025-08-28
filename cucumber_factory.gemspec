@@ -26,6 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency('cucumber')
   spec.add_dependency('activesupport')
   spec.add_dependency('activerecord')
-  spec.add_dependency('cucumber_priority', '>=0.2.0')
+  spec.add_dependency('cucumber_priority', '>=1.1.0')
 
 end

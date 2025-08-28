@@ -1,5 +1,5 @@
 def prepare_cucumber_example
-  if Cucumber::VERSION >= '3'
+  if Gem::Version.new(Cucumber::VERSION) >= Gem::Version.new('3.0')
     @runtime = Cucumber::Runtime.new
     scenario = double('scenario', :language => 'en', :accept_hook? => true)
     @runtime.send(:begin_scenario, scenario)
@@ -22,7 +22,7 @@ def prepare_cucumber_example
 end
 
 def invoke_cucumber_step(step, doc_string = nil, data_table = nil)
-  if Cucumber::VERSION >= '2'
+  if Gem::Version.new(Cucumber::VERSION) >= Gem::Version.new('2.0')
     multiline_argument = Cucumber::MultilineArgument::None.new
 
     if doc_string.present?

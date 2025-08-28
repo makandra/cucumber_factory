@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-TRANSFORMS_SUPPORTED = Cucumber::VERSION < '3'
+TRANSFORMS_SUPPORTED = Gem::Version.new(Cucumber::VERSION) < Gem::Version.new('3.0')
 
 describe 'steps provided by cucumber_factory' do
   before(:each) do
