@@ -215,7 +215,7 @@ Custom steps will always be preferred over factory steps. Also Cucumber will not
 Supported Cucumber versions
 ----------------------------
 
-cucumber_factory is tested against Cucumber 1.3, 2.4, 3.0 and 3.1.
+cucumber_factory is tested against Cucumber 1.3, 2.4, 3.0, 3.1, 4.1, 5.3, 9.2 and 10.1.
 
 
 Installation

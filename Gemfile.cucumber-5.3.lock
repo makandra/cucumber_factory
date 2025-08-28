@@ -5,7 +5,7 @@ PATH
       activerecord
       activesupport
       cucumber
-      cucumber_priority (>= 0.2.0)
+      cucumber_priority (>= 1.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -64,7 +64,7 @@ GEM
       cucumber-core (~> 8.0, >= 8.0.1)
       cucumber-cucumber-expressions (~> 10.3, >= 10.3.0)
       cucumber-messages (~> 13.0, >= 13.0.1)
-    cucumber_priority (0.3.2)
+    cucumber_priority (1.1.0)
       cucumber
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
