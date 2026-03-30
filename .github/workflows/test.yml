@@ -66,6 +66,17 @@ jobs:
           gemfile: Gemfile.cucumber-10.1
           bundler: 2.6.3
 
+        - ruby: 4.0.2
+          gemfile: Gemfile.rails-7
+          bundler: 2.6.3
+        - ruby: 4.0.2
+          gemfile: Gemfile.rails-8
+          bundler: 2.6.3
+
+        - ruby: 4.0.2
+          gemfile: Gemfile.cucumber-10.1
+          bundler: 2.6.3
+
     env:
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
     steps:

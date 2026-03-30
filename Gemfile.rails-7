@@ -5,6 +5,7 @@ gem 'bigdecimal' # Bundled gem since Ruby 3.4
 gem 'mutex_m' # Bundled gem since Ruby 3.4
 gem 'base64' # Bundled gem since Ruby 3.4
 gem 'logger' # Default gem since Ruby 3.4
+gem 'benchmark' # Bundled gem since Ruby 4.0
 
 # Runtime dependencies
 gem 'cucumber', '~> 9.2.1'
