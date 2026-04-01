@@ -23,6 +23,7 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     base64 (0.2.0)
+    benchmark (0.5.0)
     bigdecimal (3.1.9)
     builder (3.3.0)
     carrierwave (3.1.1)
@@ -67,9 +68,10 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     diff-lcs (1.5.1)
+    drb (2.2.3)
     factory_bot (6.5.0)
       activesupport (>= 5.0.0)
-    ffi (1.17.1-x86_64-linux-gnu)
+    ffi (1.17.4-x86_64-linux-gnu)
     gemika (0.8.4)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
@@ -80,10 +82,13 @@ GEM
     marcel (1.0.4)
     mini_magick (4.13.2)
     mini_mime (1.1.5)
-    minitest (5.25.4)
+    minitest (6.0.2)
+      drb (~> 2.0)
+      prism (~> 1.5)
     multi_test (1.1.0)
     mutex_m (0.3.0)
     pg (1.5.9)
+    prism (1.9.0)
     public_suffix (6.0.1)
     rake (13.2.1)
     rspec (3.13.0)
@@ -115,6 +120,7 @@ DEPENDENCIES
   activerecord (~> 7.0.1)
   activesupport (~> 7.0.1)
   base64
+  benchmark
   bigdecimal
   carrierwave
   cucumber (~> 9.2.1)

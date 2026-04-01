@@ -104,7 +104,9 @@ GEM
     mini_magick (5.3.1)
       logger
     mini_mime (1.1.5)
-    minitest (5.25.5)
+    minitest (6.0.2)
+      drb (~> 2.0)
+      prism (~> 1.5)
     multi_test (1.1.0)
     pg (1.6.1)
     pg (1.6.1-aarch64-linux)
@@ -114,6 +116,7 @@ GEM
     pg (1.6.1-x86_64-darwin)
     pg (1.6.1-x86_64-linux)
     pg (1.6.1-x86_64-linux-musl)
+    prism (1.9.0)
     public_suffix (6.0.2)
     rake (13.3.0)
     rspec (3.13.1)
